@@ -32,7 +32,6 @@ group :production do
   gem 'thin'
 end
 
-
 group :development do
   gem 'mysql'
 end
