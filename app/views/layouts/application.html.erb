@@ -8,14 +8,19 @@
 </head>
 <body>
   <div id='toptext'>
-    <%= link_to "Demo", '/'  %> |
-    <%= link_to "Ptolemy's Moon", '/ptolemy/moon'  %> |
+    <%= link_to "Home", '/'  %> |
+    <%= link_to "Ptolemy's Sun", '/ptolemy/index'  %> |
+    <%= link_to "Moon", '/ptolemy/moon'  %> |
     <%= link_to "Venus", '/ptolemy/venus'  %> |
     <%= link_to "Mars", '/ptolemy/mars'  %> |
     <%= link_to "Jupiter", '/ptolemy/jupiter'  %> |
     <%= link_to "Saturn", '/ptolemy/saturn'  %> |
     <%= link_to "Universe", '/ptolemy/universe'  %> |
+    <div class='right'>
+      <%= link_to "About", '/about'  %> 
+    </div>
   </div>
+
 <%= yield %>
 <canvas id="dynamic"></canvas>
 <canvas id="static"></canvas>

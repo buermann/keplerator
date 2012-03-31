@@ -4,6 +4,8 @@
     universe.label  = false;
 
     universe.init({ earth:{type:'center'},mercury:{center:'sun'},venus:{center:'sun'},sun:{center:'earth'},moon:{center:'earth'},mars:{center:'sun'}/*,jupiter:{},saturn:{} */});
+    universe.satellitePaths    = true;
+    universe.includeSatellites = true;
     universe.rate = 1;
     universe.min_planet_size = 4;
     universe.max_planet_size = 12;
@@ -24,9 +26,11 @@
 </script>
 
 <div id='lefttext'>
-  <a href="http://en.wikipedia.org/wiki/Tycho_Brahe">Tycho Brahe's</a> geoheliocentric model had the Moon and Sun orbiting the Earth, and the rest of the planets orbit the Sun, not unlike the ancient Egyptian models in which the inner planets orbited the sun and the outer planets orbited Earth.
+  <a href="http://en.wikipedia.org/wiki/Tycho_Brahe">Tycho Brahe's</a> geoheliocentric model had the Moon and Sun orbiting the Earth, and the rest of the planets orbit the Sun, not unlike the ancient Egyptian models in which the inner planets orbited the sun and the outer planets orbited Earth.  It was a popular alterntive to the Copernican system for much of the 17th century, and was doctrine among the Jesuits until the mid 18th century.
 
-  <p>As I'm lacking any parameters or specific details for Tycho's system, this model is just the modern relative distances scaled to the browser window, with the planets drawing eccentric elipses around the Sun by way of the Tusi couple.  That is to say, it is total and utter nonsense, while Tycho's system was an elegant, philisophically and religiously appealing synthesis of conflicting theories.
+  <p>As I'm lacking any parameters or specific details for Tycho's system, this model is just the modern relative distances scaled to the browser window, with the planets drawing eccentric elipses around the Sun by way of the Tusi couple.  That is to say, it is total and utter nonsense, while Tycho's system was an elegant, philisophically and religiously appealing synthesis of conflicting theories.  It also, coicidentally, continues to have a handful of modern adherents.
+  
+
  </div>
 
 <div id='righttext'>

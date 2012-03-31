@@ -2,27 +2,76 @@
   window.onload = function(){
     var universe = new Universe();
 
-    universe.init({ sun:{},mercury:{},venus:{},earth:{type:'center'},mars:{} });
+    universe.init();
+    universe.max_planet_size = 10;
+    universe.rate = 5;
+    universe.label = true;
+    universe.eccentricityFactor = 1;
 
-    universe.planets.mercury.couple({type:'tusi',radius:.2});
-
-    universe.planets.venus.eccentric(0.2).equant(true)
-
-
-    universe.planets.mars.couple({type:'tusi',radius:.39}).epicycles({type:'epicycle',period:.033,radius:0.25});  
+    for (var i in universe.planets) {
+      p = universe.planets[i];
+      if (p.type == 'satellite') {
+        p.aus = p.aus + p.aus*200;
+      }
+      p.elliptic()
+    }
     universe.setup(); 
   }
 </script>
 
-<div id='lefttext'>This is just a simple demonstration of what's working so far.  We've got mercury running around on a tusi couple, venus has the ptolemaic equant, the sun on a simple deferent, and mars is running an epicycle linked to a tusi couple on the deferent.
+<div id='lefttext'>
+  Here's a modern Keplerian solar system, in that we're including planets (Neptune and Uranus) and a Kuiper object (134340 Pluto) discovered after Kepler's time.
+  
+  <p>If you thought at first glance that the planets here are moving in perfect circles we'd forgive you as easily as you might forgive Aristotle for thinking the same thing.  
 
+  <p>Some other models of the heavens are very roughly sketched out:
   <ol>
     <li><%= link_to "Ptolemy", 'ptolemy/' %>
     <li><%= link_to "Tycho", 'tycho/universe' %>
-    <li><%= link_to "Copernican", 'copernicus/universe' %>
+    <li><%= link_to "Nicolas", 'copernicus/universe' %>
   </ol>
 </div>
 
-<div id='righttext'>
-  We still need to demonstrate: Urdi's Lemma; Ptolemy's Mercury; a good scaling solution for including moons; better access methods for setting up Egyptian and Tychonic heliogeocentric systems; a good reference (David King?) for getting the parameters of other models; introducing latitudinal motions on a three dimensional canvas.
+<div id='righttext' style='font-size:.6em;margin:20px;'>
+<ul>
+  <li>Sanskrit/Indian tradition:
+  <ul>
+   <li>Lagadha, 1000BC
+   <li>Aryabhata  476–550 
+   <li>Brahmagupta 598–668 
+   <li>Varahamihira 505
+   <li>BhaskaraI 629
+   <li>Lalla 700s
+   <li>BhaskaraII
+   <li>Sripati 1045
+   <li>Suri, mahendra 1300s
+   <li>Nilakanthan 1444-1544
+   <li>Pisarati 1550-1621 
+   <li>Finally, the Indian scholar Mir Muhammad Hussain wrote a Persian treatise on astronomy about the heliocentric model in the 1770s, and argued that there exists an infinite number of universes (awalim), each with their own planets and stars, much like Bruno 300 years earlier.
+  </ul>
+  <li>Greek tradition.  According to a story reported by Simplicius, Plato posed a question for Greek astronomers: "By the assumption of what uniform and orderly motions can the apparent motions of the planets be accounted for?" 
+  <ul>
+   <li>Heracleides, 390BC, Turkey.  Some say he had mercury and venus orbit the sun, outer planets around the earth; the earth rotates, per Aryabhata, and according to Simplicius proposed the Sun was static and the Earth moved.  But: http://adsabs.harvard.edu/full/1992JHA....23..233E
+   <li>Eudoxus, 380BC, Eygpt
+   <li>Capella, Martianus, 400s CE, proposed inner planets orbit the sun, http://en.wikipedia.org/wiki/File:Naboth_Capella.JPG   
+
+  </ul>
+  <li>Arabic tradition:
+  <ul>
+    <li>Battani
+    <li>Biruni
+    <li>Urdi
+    <li>Tusi
+    <li>Shatir
+  </ul>
+
+  <li>Latin tradition:
+  <ul>
+    <li>Copernicus
+    <li>Gilbert
+    <li>Ursus
+    <li>Tycho
+    <li>Kepler
+  </ul>
+
 </div>

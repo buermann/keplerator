@@ -8,6 +8,8 @@ function Universe() {
 
   this.day = Math.floor(Math.random()*3650+1)
 	this.rate = 2; // in days
+
+  this.eccentricityFactor = 1; // exaggerate the eccentricity of elliptical orbits this much
   this.max_planet_size = 20;
   this.min_planet_size = 3;
   this.max_aus = 0;
@@ -17,27 +19,28 @@ function Universe() {
   this.displayDay = true;
   this.shadow   = true;
 
+  this.base_period = this.bp = 365.26;
 	this.PlanetBase = {
     // ptolemy's mean distances:
     // http://books.google.com/books?id=ntZwxttZF-sC&lpg=PA34&dq=ptolemy%20distance%20deferent%20epicycle&pg=PA35#v=onepage&q&f=false
     // 360 degrees/earth days of it's year = mean motion in degrees/day,
     // tropical rather than synodic
     // size is the mean diameter of the body
-		sun:    { color: "#EC0",  aus: 1,     mm: 0.985626283,period: 365.26,  size: 1391000 },
-		mercury:{ color: "silver",  aus: 0.387, mm: 4.09235,period: 87.97,  size: 4878 },
-		venus:  { color: "#DCDBD6", aus: 0.723, mm: 1.60216,period: 224.7,  size: 12104 },
-		earth:  { color: "#35F",    aus: 1.000, mm: 0.985600,period: 365.26,size: 12756 },
-      moon:   { center:'earth', color: '#F9F8F9', aus:0.0026, mm: 13.35,  period:27.321,  size: 3476, },
-		mars:   { color: "red",     aus: 1.524, mm: 0.524051,period: 686.98,size: 6787 },
-		jupiter:{ color: "orange",  aus: 5.203, mm: 0.083092,period: 4331,  size: 142984 },
-      io:      { center:'jupiter',color:'#EAE18B', aus:.0028, mm:1.77/365.2, size:3660},
-      europa:  { center:'jupiter',color:'#7C4724', aus:.0044, mm:3.55/365.2, size:3121},
-      ganymede:{ center:'jupiter',color:'#7E766A', aus:.0072, mm:7.15/365.2, size:5262},
-      callisto:{ center:'jupiter',color:'#716857', aus:.0126, mm:16.68/365.2,size:4820},
-		saturn: { color: "pink",    aus: 9.539, mm: 0.033612,period: 10750, size: 112536 },
-		uranus: { color: "green",   aus: 19.18, mm: 0.011693,period: 30660, size: 51118 },
-		neptune:{ color: "purple",  aus: 30.06, mm: 0.005973,period: 60152, size: 49528 },
-		pluto:  { color: "white",   aus: 39.53, mm: 0.004000,period: 90410, size: 2300 },
+		sun:    { color: "#EC0",  aus: 1, mm: 0.985626283,period: 365.26,  size: 1391000 },
+		mercury:{ color: "silver",  aus: 0.387, mm: 4.09235,period: 87.97,  size: 4878, eccentricity:0.2056},
+		venus:  { color: "#DCDBD6", aus: 0.723, mm: 1.60216,period: 224.7,  size: 12104, eccentricity:0.00677323 },
+		earth:  { color: "#35F",    aus: 1.000, mm: 0.985600,period: 365.26,size: 12756, eccentricity:0.0167 },
+      moon:   { type:'satellite', center:'earth', color: '#F9F8F9', aus:0.0026, mm: 13.35,  period:27.321,  size: 3476, eccentricity:0549 },
+		mars:   { color: "red",     aus: 1.524, mm: 0.524051,period: 686.98,size: 6787, eccentricity:0.09341233 },
+		jupiter:{ color: "orange",  aus: 5.203, mm: 0.083092,period: 4331,  size: 142984, eccentricity:0.04839266 },
+      io:      { type:'satellite', center:'jupiter',color:'#EAE18B', aus:.0028, mm:360/1.77, size:3660},
+      europa:  { type:'satellite', center:'jupiter',color:'#7C4724', aus:.0044, mm:360/3.55, size:3121},
+      ganymede:{ type:'satellite', center:'jupiter',color:'#7E766A', aus:.0072, mm:360/7.15, size:5262},
+      callisto:{ type:'satellite', center:'jupiter',color:'#716857', aus:.0126, mm:360/16.68,size:4820},
+		saturn: { color: "pink",    aus: 9.539, mm: 0.033612,period: 10750, size: 112536, eccentricity:0.05415060 },
+		uranus: { color: "green",   aus: 19.18, mm: 0.011693,period: 30660, size: 51118, eccentricity:0.04716771 },
+		neptune:{ color: "purple",  aus: 30.06, mm: 0.005973,period: 60152, size: 49528, eccentricity:0.00858587 },
+		pluto:  { color: "white",   aus: 39.53, mm: 0.004000,period: 90410, size: 2300, eccentricity:0.248 },
 	}
 
 }
@@ -47,7 +50,11 @@ Universe.prototype = {
 	  // after onload...
 	  var dynamic = $('#dynamic')[0];
 	  var static = $('#static')[0];
-
+    
+    this.center = {};
+    this.satellitePaths    = false;
+    this.includeSatellites = false;
+    
 		this.h = static.height = dynamic.height = Math.floor($(window).height())*.95;
 		this.w =  static.width = dynamic.width = Math.floor($(window).width())*.6;
 		this.origin = { x: this.w / 2, y: this.h / 2 };
@@ -72,6 +79,7 @@ Universe.prototype = {
       }
       // find the center
       if (p.type == 'center') this.center = p;
+
 		  p.origin = this.origin;
       // extend the planet config object into a Planet object
 		  this.planets[p.name] = new Planet(this,p);
@@ -80,6 +88,7 @@ Universe.prototype = {
     // Or set the center to the sun if there isn't one.
     if (Object.keys(this.center).length === 0 ) {
       this.center = this.planets.sun;
+      this.planets.sun.type = 'center'
     }
     
   },
@@ -183,9 +192,11 @@ Universe.prototype = {
 
 
 	stop: function(day) {
+
 		if (day > 0) this.animate(day);
-		console.log("stop");
 		this.stopped = true;
+
+		console.log("stop");
 	},
 
 	drawTrail: function(disc) {
@@ -206,11 +217,17 @@ Universe.prototype = {
 		for (var n in this.planets) {
 			p = this.planets[n];
 
+      if (!this.includeSatellites & p.type == 'satellite') continue; 
+
 			p.lastPoint = [p.x, p.y];
 			p.nextPoint(this.day);
 
 			// draw a path behind the planet
-			this.drawTrail(p);
+      if (p.type != 'satellite' ) {
+        this.drawTrail(p);
+      } else if (this.satellitePaths) {
+        this.drawTrail(p);
+      }
 		}
 
     if (this.displayDay) {
@@ -226,6 +243,15 @@ Universe.prototype = {
         $('#dynamic')[0].getContext('2d').clearRect(0, 0, universe.w, universe.h);
         universe.animate();
       });
+    } else {
+      startMsg = "Click to Start";
+      ctx = $('#dynamic')[0].getContext("2d");
+      ctx.moveTo(this.x/2,this.y/4);
+      ctx.fillStyle = '#DDD'; 
+      ctx.font = '12pt Helvetica';
+      ctx.fillText(startMsg,this.w/2,this.h/6);
+      ctx.closePath();
+      ctx.stroke();
     }
   },
 }
@@ -235,6 +261,8 @@ Planet = function(universe,p) {
   this.universe = universe;
   this.shadow   = true;
   this.offset   = 0;
+
+  this._deferent = 'circle';
 
   this.ctx = $('#dynamic')[0].getContext("2d");
 
@@ -253,10 +281,17 @@ Planet = function(universe,p) {
   };
 
   this.deferent = function(mm, distance) {
+    this._deferent = 'circle';
     this.mm  = mm;
     this.aus = distance;
     return this;
-  }
+  };
+
+  this.elliptic = function(eccentricity) {
+    this._deferent = 'ellipse';
+    this.eccentricty  = eccentricity || this.eccentricty;
+    return this;
+  };
 
   this.cycles = [];
 
@@ -268,7 +303,7 @@ Planet = function(universe,p) {
     return this;
   };
   this.couple = function(es) {
-    // type = tusi, epicycle, urdi, ellipse
+    // type = tusi, epicycle, urdi
     if (es == undefined) { return this.cycles; }
     es.type = es.type || "tusi";
     this.cycles.push( es );
@@ -349,9 +384,10 @@ Planet.prototype = {
     phi = 90*Math.PI/180;
     this.last_ex = this.ex; this.lastey = this.ey;
     a = e.radius+this.meancenter; b = this.meancenter;
-    this.ex = ox + a*Math.cos(t)*Math.cos(phi) - b*Math.sin(t)*Math.sin(phi);
-    this.ey = oy + a*Math.cos(t)*Math.sin(phi) - b*Math.sin(t)*Math.cos(phi);
-    this.drawCircle(this.ex, this.ey, 1, {color:'#FF0'});
+
+    this.ex = this.origin.x + a*Math.cos(t)*Math.cos(phi) - b*Math.sin(t)*Math.sin(phi);
+    this.ey = this.origin.y + a*Math.cos(t)*Math.sin(phi) - b*Math.sin(t)*Math.cos(phi);
+    //this.drawCircle(this.ex, this.ey, 1, {color:'#FF0'});
     return this;
   },
 
@@ -475,30 +511,44 @@ Planet.prototype = {
     // find the deferent
     eq = this.equant();
     this.last_eq = eq;
-    var def_x = this.x = ox -                   eq * Math.sin( this.t );
-    var def_y = this.y = oy - this._eccentric - eq * Math.cos( this.t );
+ 
+    var def_x; var def_y; 
+    if (this._deferent == 'circle') {
+      this.x = ox -                   eq * Math.sin( this.t );
+      this.y = oy - this._eccentric - eq * Math.cos( this.t );
+
+      // draw the line from the center of the deferent to the point
+      this.drawLine(ox, oy-this._eccentric, this.x, this.y);
+      // if the planet has an elliptical path let it hang in space
+    } else if (this._deferent == 'ellipse') {
+      phi = 90*Math.PI/180;
+
+      var a = this.meancenter; // major axis is equal the mean distance to the focus
+      var e = this.eccentricity*this.universe.eccentricityFactor;
+      var b = a*Math.sqrt(Math.abs(1-e*e));
+
+      this.x = ox + a*Math.cos(t)*Math.cos(phi) - b*Math.sin(t)*Math.sin(phi);
+      this.y = oy + a*Math.cos(t)*Math.sin(phi) - b*Math.sin(t)*Math.cos(phi);
+      //this.drawCircle(this.ex, this.ey, 1, {color:'#FF0'});
+    }
 
     // draw the line to the eccentric
     if (this._eccentric) this.drawLine(this.origin.x, this.origin.y, this.origin.x, this.origin.y-this._eccentric);
-      // draw the line from the center of the deferent to the point
-      this.drawLine(ox, oy-this._eccentric, def_x, def_y);
 
-      if (this._equant) {
-        // draw the equant line to the deferent center
-        this.drawLine(this.origin.x,this.origin.y-2*this._eccentric, def_x, def_y);
-      }
+    // draw the line from the equant to the deferent
+    if (this._equant) this.drawLine(this.origin.x,this.origin.y-2*this._eccentric, this.x, this.y);
+    
 
-      var last_x, last_y;
-      for (var e = 0; e < this.cycles.length; e++) {
-        epi = this.cycles[e];
-        if (!epi || !epi.radius ) { break; }
-        this[epi.type]( epi );
-      }
+    var last_x, last_y;
+    for (var e = 0; e < this.cycles.length; e++) {
+      epi = this.cycles[e];
+      if (!epi || !epi.radius ) { break; }
+      this[epi.type]( epi );
+    }
 
-      // draw the planet
-      this.drawPlanet(this.x, this.y, this.size, { fill: true, color: this.color });
+    // draw the planet
+    this.drawPlanet(this.x, this.y, this.size, { fill: true, color: this.color });
   },
-
 
 }
 

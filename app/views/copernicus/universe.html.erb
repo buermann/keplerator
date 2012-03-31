@@ -4,6 +4,9 @@
     universe.label  = false;
 
     universe.init({ sun:{type:'center'},mercury:{},venus:{},earth:{},moon:{},mars:{}/*,jupiter:{},saturn:{} */});
+    universe.satellitePaths    = false;
+    universe.includeSatellites = true;
+
     universe.rate = .5;
     universe.min_planet_size = 4;
     universe.max_planet_size = 12;
@@ -24,8 +27,10 @@
 </script>
 
 <div id='lefttext'>
-  Here we have a very rough approximation of what Copernicus proposed, with a heliostatic Sun at a small eccentric to the center of the universe, and using al-Tusi's couple to create the equivalent motions to Ibn al-Shatir's model, and predicting roughly the same positions in the sky as Ptolemy.  Because there was no equant, however, the calculations of planetary positions was considerably simpler.
- 
+  Here we have a very rough approximation of what Copernicus proposed, with a heliostatic Sun at a small eccentric to the center of the universe, using al-Tusi's couple to create (highly exaggerated) eliptical paths, and predicting roughly the same positions in the sky as Ptolemy.  Because there was no equant, however, the calculations of planetary positions was considerably simpler.
+
+  <p>The great innovation to medieval eyes was ridding the model of the equant.  To Kepler's eyes the great innovation was explaining the retrograde motions of the planets without "the hundred-times-more-absurd spirals".
+  
  </div>
 
 <div id='righttext'>

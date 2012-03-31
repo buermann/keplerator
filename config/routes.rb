@@ -2,14 +2,10 @@ Keplerator::Application.routes.draw do
   # The priority is based upon order of creation:
   # first created -> highest priority.
    root :to => "home#index"
+   match '/:action' => 'home'
 
-   match 'home/:action' => 'home'
-
-   # We don't really need these, since the default route covers them:
-   # they're more like note keeping here:
+   # more like note keeping of the ground we want to cover, which needs to find a better home:
    
-
-
    # the Sanskrit tradition
    match 'lagadha/:action' => 'lagadha' # 1000BC
    match 'aryabhata/:action' => 'aryabhata' # 476–550 
@@ -22,6 +18,7 @@ Keplerator::Application.routes.draw do
    match 'suri/:action' => 'suri' # mahendra, 1300s
    match 'nilakanthan/:action' => 'nilakanthan' # 1444-1544
    match 'pisarati/:action' => 'pisarati' # 1550-1621 
+
    # Bruno redux: the Indian scholar Mir Muhammad Hussain had travelled to England in 1774 to study Western science and, on his return to India in 1777, he wrote a Persian treatise on astronomy. He wrote about the heliocentric model, and argued that there exists an infinite number of universes (awalim), each with their own planets and stars.
 
    # The Greek tradition, According to a story reported by Simplicius, Plato posed a question for Greek astronomers: "By the assumption of what uniform and orderly motions can the apparent motions of the planets be accounted for?" 

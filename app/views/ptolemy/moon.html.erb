@@ -3,6 +3,8 @@
     var universe = new Universe();
 
     universe.init({ earth:{type:'center'},moon:{},sun:{},/*mars:{}*/});
+    universe.satellitePaths    = true;
+    universe.includeSatellites = true;
     aus = universe.planets.moon.aus;
     mm  = universe.planets.moon.mm;
     universe.planets.sun.aus = aus*1.25; // scale the mean sun into the picture
