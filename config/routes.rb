@@ -8,8 +8,6 @@ Keplerator::Application.routes.draw do
    # We don't really need these, since the default route covers them:
    # they're more like note keeping here:
    
-   # Egyptian antiquity
-   match 'heracleides/:action' => 'heracleides' # mercury and venus orbit the sun, etc around the earth
 
 
    # the Sanskrit tradition
@@ -24,15 +22,19 @@ Keplerator::Application.routes.draw do
    match 'suri/:action' => 'suri' # mahendra, 1300s
    match 'nilakanthan/:action' => 'nilakanthan' # 1444-1544
    match 'pisarati/:action' => 'pisarati' # 1550-1621 
-   #  Bruno redux: the Indian scholar Mir Muhammad Hussain had travelled to England in 1774 to study Western science and, on his return to India in 1777, he wrote a Persian treatise on astronomy. He wrote about the heliocentric model, and argued that there exists an infinite number of universes (awalim), each with their own planets and stars.
+   # Bruno redux: the Indian scholar Mir Muhammad Hussain had travelled to England in 1774 to study Western science and, on his return to India in 1777, he wrote a Persian treatise on astronomy. He wrote about the heliocentric model, and argued that there exists an infinite number of universes (awalim), each with their own planets and stars.
 
-   # The Greek tradition
-   match 'eudoxus/:action' => 'eudoxus' # 380bc
+   # The Greek tradition, According to a story reported by Simplicius, Plato posed a question for Greek astronomers: "By the assumption of what uniform and orderly motions can the apparent motions of the planets be accounted for?" 
+
+   match 'heracleides/:action' => 'heracleides' # 390BC, Turkey.  Some say he had mercury and venus orbit the sun, outer planets around the earth; the earth rotates, per Aryabhata, and according to Simplicius proposed the Sun was static and the Earth moved.  C.f. http://adsabs.harvard.edu/full/1992JHA....23..233E
+   match 'capella/:action' => 'capella' # 400s CE, Martianus Capella, definitely proposed inner planets orbit the sun, http://en.wikipedia.org/wiki/File:Naboth_Capella.JPG
+
+
+   match 'eudoxus/:action' => 'eudoxus' # 380bc, Eygpt
    match 'aristotle/:action' => 'aristotle'
 
    # Greco-Roman Egyptian, 168AD
    match 'ptolemy/:action' => 'ptolemy'
-
 
    # The Arabic tradition
    # The Maragheh School, northwest Iran, 13th century.
