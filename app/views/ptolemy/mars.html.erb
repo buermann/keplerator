@@ -1,0 +1,17 @@
+<script>
+  window.onload = function(){
+    var universe = new Universe();
+
+    // Ptolemy's Mars
+    universe.init({ sun:{},earth:{type:'center'},mars:{}  });
+    universe.planets.sun.eccentric(0);
+    universe.planets.sun.aus  = 45;
+
+    universe.planets.mars.aus = 60; // every ptolemaic planet has a deferent with radius 60?
+    <%= render 'mars' %>
+
+    universe.setup(1); 
+  }
+</script>
+
+<div id='lefttext'>The equant is a bitch.</div>

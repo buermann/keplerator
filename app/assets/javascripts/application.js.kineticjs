@@ -1,0 +1,242 @@
+function Universe(){
+  this.lasttime; // track the last frame time, we only draw the static layer while the animation is moving smoothly.
+  this.origin   = { x:$(window).width()/2, y:$(window).height()/2 };
+
+  this.PlanetBase = {
+    sun:      {color:"yellow",aus:0, period:0, size:1391000/40 },
+    mercury:  {color:"silver",aus:0.387,period:87.97, size:4878, _eccentric:2},
+    /* venus:    {color:"yellow",aus:0.723,period:224.7, size:12104  },
+    earth:    {color:"blue",  aus:1.000,period:365.26,size:12756  }, */
+    mars:     {color:"red",   aus:1.524,period:686.98,size:6787, _eccentric:2 }, 
+    /*jupiter:  {color:"orange",aus:5.203,period:4331,  size:142984 },
+    saturn:   {color:"pink",  aus:9.539,period:10750, size:112536},
+    uranus:   {color:"green", aus:19.18,period:30660, size:51118  },
+    neptune:  {color:"purple",aus:30.06,period:60152, size:49528  },
+    pluto:    {color:"white", aus:39.53,period:90410, size:2300   },*/
+  }
+
+}
+Universe.prototype = {
+  init: function init() {
+    this.planets = {};
+    this.day = 1;
+    this.rate = 10; // in days
+    // after onload...
+    var canvas = $('#canvas');
+    h = $('body').height = canvas.height = $(window).height();
+    w = $('body').width  = canvas.width  = $(window).width();
+
+    //$(window).resize( function() { scaleUniverse() });
+    this.origin = { x:w/2, y:h/2 };
+
+    this.stage        = new Kinetic.Stage("canvas", canvas.width, canvas.height);
+    this.pathLayer    = new Kinetic.Layer({name:'paths'});
+    this.dynamicLayer = new Kinetic.Layer({name:"dynamic"});
+
+    this.stage.add(this.pathLayer);
+    this.stage.add(this.dynamicLayer);
+
+    for (var i in this.PlanetBase ) {
+      p = this.PlanetBase[i] ; p.name = i;
+      this.addPlanet(p);
+    }
+
+    // toggleAnimation needs stage to be in the enclosed context
+    var stage = this.stage;
+    var toggleAnimation = function(){ stage.isAnimating ? stage.stop() : stage.start(); }
+    this.stage.on("click", toggleAnimation );
+
+  },
+
+  addPlanet: function addPlanet(p) {
+    p.origin = this.origin;
+    this.planets[P.name] = new Planet(P,this.dynamicLayer);
+    layer.add( this.planets[P.name].disc );
+  },
+
+  start: function() {
+    // stage.onFrame() will overwrite "this" context with the stage context
+    var universe = this;
+    this.stage.onFrame(function(frame){
+      universe.animate(this, frame);
+    });
+    this.stage.start();
+    this.stage.stop();
+  },
+
+  path: function path(layer,disc) {
+    ctx = layer.context;
+    ctx.lineWidth   = 1;
+    ctx.strokeStyle = "#050";
+    ctx.beginPath();
+    ctx.moveTo(disc.lastPoint[0],disc.lastPoint[1]);
+    ctx.lineTo(disc.x,disc.y);
+    ctx.stroke();
+  },
+
+  animate: function animate(stage, frame) {
+    this.dynamicLayer = stage.childrenNames['dynamic'];
+    this.pathLayer    = stage.childrenNames['paths'];
+    circles           = this.dynamicLayer.getChildren();
+    for (var n = 0; n < circles.length; n++ ) {
+      d = circles[n];
+      p = this.planets[d.name];
+      if (p.type != 'planet') { continue; }
+
+      d.lastPoint = [d.x,d.y]; 
+
+      p.nextPoint( this.day ) ;
+
+      this.path(this.pathLayer,d);
+    }
+    this.day+= this.rate; // increment the day by 1.
+    //this.dynamicLayer.draw();
+  },
+
+  scaleUniverse: function scaleUniverse() {
+    var canvas = $('#canvas');
+    h = $('body').height = canvas.height = $(window).height();
+    w = $('body').width  = canvas.width  = $(window).width();
+  }
+
+}
+
+Planet = function(p,layer) {
+  // create object methods for any given shit that is passed until we think of everything:
+  this.layer = layer;
+  this.ctx   = layer.getContext("2d");;
+  for (i in p) {
+    this[i] = p[i];
+  }
+  // initialize a random offset:
+  this.meansun = this.aus*35;
+  this.type    = ( this.meansun > 0 ) ? "planet" : "center";
+  this.period  = p.period*20;
+  this.radius  = Math.ceil(p.size/6000);
+  this.offset = (Math.PI/180)*Math.floor(Math.random()*360);
+
+  this._eccentric = 0; 
+  this.eccentric = function(e) {
+    if (e == undefined) { return this._eccentric; }
+    this._eccentric = e;
+    return this;
+  };
+
+  this.deferent = function(period,distance) {
+    // period in earth years, distance in AUs.
+    this.period   = period;
+    this.distance = distance;
+  }
+
+  this._epicycles;
+  this.epicycles = function(es) {
+    // [period:,radius:],..., just an array of epicycle definitions, from the deferent outward.
+    if (es == undefined) { return this._epicycles; }
+    this._epicycles = es;
+    return this; 
+  };
+ 
+  //offset: (Math.PI/180)*Math.floor(Math.random()*360),
+ 
+  this.disc = new Kinetic.Circle({
+      name:   this.name,
+      type:   this.type,
+      radius: this.radius,
+      offset: this.offset,
+      x: 0, y:0,
+      fill: this.color,
+      stroke: this.color,
+      strokeWidth: 1,
+  });
+
+  // Each method would take {label:...,offset:float,degrees:int,radians:float,draw:bool}
+  //  The angel in degrees/radians from the east provide the initial condition
+  // Planet.eccentric({label:...,offset:float,degrees:int,radians:float,draw:bool})
+  // Planet.epicycle({ radius:float, period:float }
+  // Planet.equant...
+  // Planet.tusi({radius:float}) // 
+  // Planet.urdi({  }) // urdi is a particular kind of offset epicycle on an epicycle
+
+  // We also need "vertical" tusi couples and epicycles along the z-axis.
+  this.nextPoint(1);
+};
+
+Planet.prototype = {
+   x: function() { alert("You need to access the coordinates of the disc.") },
+   y: function() { alert("You need to access the coordinates of the disc.") },
+
+   nextPoint: function(time) { 
+     var ox = this.origin.x
+     var oy = this.origin.y
+     // tusi couple parametric http://mathworld.wolfram.com/Hypocycloid.html
+     var t = this.period ?  time * 2 * Math.PI / this.period + this.offset : 0;
+
+     var def_x = this.x = ox + this.meansun*Math.cos(t);
+     var def_y = this.y = oy + this._eccentric + this.meansun*Math.sin(t);
+
+     this.drawCircle(this.origin.x,this.origin.y,this.meansun);
+     this.drawLine(ox,oy,def_x,def_y);
+
+     var last_x, last_y;
+     for (var e in this._epicycles ) {
+       epi = this._epicycles[e];
+       var period = epi[0];
+       var radius = epi[1];
+       last_x = last_x || def_x;
+       last_y = last_y || def_y;
+
+       t = time * 2 * Math.PI / period;
+       epi_x = def_x + this.meansun*Math.cos(t);
+       epi_y = def_y + this.meansun*Math.sin(t);
+
+       this.drawCircle(epi_x,epi_y,radius);
+
+     }
+     this.disc.x = this.x ;
+     this.disc.y = this.y ;
+     return this.layer; //.draw();
+//[this.disc.x,this.disc.y];
+   },
+
+   drawLine: function(x1,y1,x2,y2) {
+    ctx = this.ctx
+    ctx.lineWidth   = 1;
+    ctx.strokeStyle = "#055";
+    ctx.moveTo(x1,y2);
+    ctx.beginPath();
+    ctx.lineTo(x2,y2);
+    ctx.closePath();
+    ctx.stroke();
+    this.drawCircle(x2,y2,2);
+   },
+
+   drawCircle: function(x,y,r) {
+    /* c = new Kinetic.Circle({
+      radius: r,
+      x: x, y: y,
+      fill: undefined,
+      stroke: '#505',
+      strokeWidth: 1,
+    }); */
+
+    ctx = this.ctx
+    ctx.strokeStyle = "#550";
+    ctx.moveTo(x,y);
+    ctx.beginPath();
+    ctx.arc(x, y, r, Math.PI*2, 0, false);
+    ctx.closePath();
+    ctx.stroke(); 
+   },
+
+}
+
+window.requestAnimFrame = (function(callback){
+    return window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.oRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    function(callback){
+        window.setTimeout(callback, 1000 / 60);
+    };
+})();

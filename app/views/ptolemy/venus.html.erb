@@ -1,0 +1,17 @@
+<script>
+  window.onload = function(){
+    var universe = new Universe();
+    // Ptolemy's Venus
+    universe.init({ sun:{},earth:{type:'center'},venus:{}  });
+    universe.planets.sun.eccentric(0);
+    universe.max_planet_size = 15;
+    universe.planets.sun.aus  = 120;
+    universe.planets.venus.aus = 60; // unit distances
+    <%= render 'venus' %>
+
+    universe.setup(); 
+  }
+</script>
+
+<div id='lefttext'>The inferior planets' epicycles move on a deferent point that is always aligned with the
+sun.  Or at least Venus does, Mercury has that "deferent on an epicycle" thing.</div>

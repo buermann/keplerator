@@ -1,0 +1,24 @@
+<script>
+  window.onload = function(){
+    var universe = new Universe();
+
+    universe.init({ earth:{type:'center'},moon:{},sun:{},/*mars:{}*/});
+    aus = universe.planets.moon.aus;
+    mm  = universe.planets.moon.mm;
+    universe.planets.sun.aus = aus*1.25; // scale the mean sun into the picture
+    universe.max_planet_size = 25;
+    universe.min_planet_size = 5;
+
+    // if you want to toss a very-not-to-scale mars and sun in
+    /* universe.planets.mars.aus = aus*4;
+    <%= render "mars" %> */
+    universe.rate = .2
+    universe.planets.moon.deferent(mm*-0.8, aus*.25).epicycles({period:mm*0.9,radius:aus*.75}).epicycles({period:mm*.015,radius:aus*.1});
+    universe.setup(1); 
+  }
+</script>
+
+<div id='lefttext'>
+  The parameters here aren't exactly right, but Ptolemy's moon model moved in this general
+  fashion with respect to the mean sun.
+ </div>

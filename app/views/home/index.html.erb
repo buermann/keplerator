@@ -1,0 +1,31 @@
+<script>
+  window.onload = function(){
+    var universe = new Universe();
+
+    universe.init({ sun:{},mercury:{},venus:{},earth:{type:'center'},mars:{} });
+
+    universe.planets.mercury.couple({type:'tusi',radius:.2});
+
+    universe.planets.venus.eccentric(0.2).equant(true)
+
+
+    universe.planets.mars.couple({type:'tusi',radius:.39}).epicycles({type:'epicycle',period:.033,radius:0.25});  
+    universe.setup(); 
+  }
+</script>
+
+<div id='lefttext'>This is just a simple demonstration of what's working so far.  We've got mercury running around on a tusi couple, venus has the ptolemaic equant, the sun on a simple deferent, and mars is running an epicycle linked to a tusi couple on the deferent.
+
+  <ol>
+    <li><%= link_to "Ptolemy", 'ptolemy/' %>
+    <li><%= link_to "Tycho", 'tycho/universe' %>
+    <li><%= link_to "Copernican", 'copernicus/universe' %>
+  </ol>
+</div>
+
+<div id='righttext'>
+  We still need to demonstrate: Urdi's Lemma; Ptolemy's Mercury; a good scaling solution for including moons; better access methods for setting up Egyptian and Tychonic heliogeocentric systems; a good reference (David King?) for getting the parameters of other models; introducing latitudinal motions on a three dimensional canvas.
+</div>
+
+<canvas id="dynamic"></canvas>
+<canvas id="static"></canvas>

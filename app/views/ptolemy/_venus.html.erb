@@ -1,0 +1,4 @@
+// epi 0.72, ecc 0.02
+universe.planets.venus.mm = universe.planets.sun.mm;
+universe.planets.venus.eccentric(universe.planets.venus.aus*.02).equant(true).epicycles({type:'epicycle',
+  period:1.60, radius:universe.planets.venus.aus*.72} );

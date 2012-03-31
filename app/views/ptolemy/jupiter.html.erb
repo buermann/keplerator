@@ -1,0 +1,20 @@
+<script>
+  window.onload = function(){
+    var universe = new Universe();
+    universe.init({ sun:{},earth:{type:'center'},jupiter:{} });
+    universe.planets.sun.eccentric(0);
+    universe.planets.sun.aus  = 10;
+    universe.max_planet_size  = 20;
+    universe.min_planet_size  = 9;
+    // jupiter's epicycle radius is 0.05 it's deferent radius
+    universe.planets.jupiter.aus = 60;
+
+    <%= render 'jupiter' %>
+
+    universe.setup(1); 
+  }
+</script>
+
+<div id='lefttext'>I keep reading that Ptolemy's models all had deferents of 60 'units', but I think this has more to do with the astronomic tables being written out in base 60.
+
+  <p>Was it that the deferent in each case anachronistically represents the Earth's mean orbit around the sun, and the epicycles the planet's mean orbit around the sun?  Or is it supposed to be the other way around?  Whatever the case, this doesn't look at all like I think it's supposed to, but it does look very pretty. </div>

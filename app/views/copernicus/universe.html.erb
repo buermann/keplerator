@@ -1,0 +1,36 @@
+<script>
+  window.onload = function(){
+    var universe = new Universe();
+    universe.label  = false;
+
+    universe.init({ sun:{type:'center'},mercury:{},venus:{},earth:{},moon:{},mars:{}/*,jupiter:{},saturn:{} */});
+    universe.rate = .5;
+    universe.min_planet_size = 4;
+    universe.max_planet_size = 12;
+
+    aus = universe.planets.moon.aus;
+    mm  = universe.planets.moon.mm;
+    universe.planets.moon.deferent(mm*-0.8, aus*80*.25).epicycles({period:mm*0.9,radius:aus*80*.75}).epicycles({period:mm*.015,radius:aus*80*.1});
+
+    for (var i in universe.planets) {
+      p = universe.planets[i];
+      if (i == 'moon') { continue;}
+      p.eccentric(.1);
+      p.couple({radius:.2*p.aus});
+    }
+
+    universe.setup(); 
+  }
+</script>
+
+<div id='lefttext'>
+  Here we have a very rough approximation of what Copernicus proposed, with a heliostatic Sun at a small eccentric to the center of the universe, and using al-Tusi's couple to create the equivalent motions to Ibn al-Shatir's model, and predicting roughly the same positions in the sky as Ptolemy.  Because there was no equant, however, the calculations of planetary positions was considerably simpler.
+ 
+ </div>
+
+<div id='righttext'>
+  Note the full phase of Venus when it is opposite the Sun from the Earth.
+
+  <p>A highly exaggerated Lunar model is included here merely for kicks.
+</div>
+

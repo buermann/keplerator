@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Keplerator</title>
+  <%= stylesheet_link_tag    "application" %>
+  <%= javascript_include_tag "kinetic-v3.8.1.js", "jquery-1.7.1.min.js","application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <div id='toptext'>
+    <%= link_to "Demo", '/'  %> |
+    <%= link_to "Ptolemy's Moon", '/ptolemy/moon'  %> |
+    <%= link_to "Venus", '/ptolemy/venus'  %> |
+    <%= link_to "Mars", '/ptolemy/mars'  %> |
+    <%= link_to "Jupiter", '/ptolemy/jupiter'  %> |
+    <%= link_to "Saturn", '/ptolemy/saturn'  %> |
+    <%= link_to "Universe", '/ptolemy/universe'  %> |
+  </div>
+<%= yield %>
+<canvas id="dynamic"></canvas>
+<canvas id="static"></canvas>
+</body>
+</html>

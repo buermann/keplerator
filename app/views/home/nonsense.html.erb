@@ -1,0 +1,22 @@
+<script>
+  window.onload = function(){
+    var universe = new Universe();
+    universe.init();
+    universe.rate = 50;
+    universe.planets.mercury.eccentric(3).epicycles([[1200,1]]);
+    universe.planets.earth.eccentric(3).epicycles([[2400,2]]);
+    universe.planets.mars.eccentric(3).epicycles([[3600,3],[12400,2]]) ;
+    universe.planets.jupiter.eccentric(3).epicycles([[4800,12],[12400,14]]) ;
+    universe.planets.saturn.eccentric(3).epicycles([[9400,10],[-12400,20],[30000,15]]) ;
+    universe.planets.neptune.eccentric(3).epicycles([[12000,35]]) ;
+    universe.planets.uranus.eccentric(3).epicycles([[46000,10],
+    [12000,8], [36000,8], [-53000,8], [10000,8] ]) ;
+    universe.planets.pluto.eccentric(3).epicycles([
+    [-66000,5], [-31000,5], [85000,5], [-45000,5], [-23000,5], [-40000,10], ]) ;
+    universe.eccentric(3);
+    //initialize the universe at a standstill on day 1
+    universe.stop(1);
+  }
+</script>
+<canvas id="dynamic"></canvas>
+<canvas id="static"></canvas>

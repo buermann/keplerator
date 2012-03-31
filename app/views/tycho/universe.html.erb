@@ -1,0 +1,37 @@
+<script>
+  window.onload = function(){
+    var universe = new Universe();
+    universe.label  = false;
+
+    universe.init({ earth:{type:'center'},mercury:{center:'sun'},venus:{center:'sun'},sun:{center:'earth'},moon:{center:'earth'},mars:{center:'sun'}/*,jupiter:{},saturn:{} */});
+    universe.rate = 1;
+    universe.min_planet_size = 4;
+    universe.max_planet_size = 12;
+
+    aus = universe.planets.moon.aus;
+    mm  = universe.planets.moon.mm;
+    universe.planets.moon.deferent(mm*-0.8, aus*80*.25).epicycles({period:mm*0.9,radius:aus*80*.75}).epicycles({period:mm*.015,radius:aus*80*.1});
+
+    for (var i in universe.planets) {
+      p = universe.planets[i];
+      if (i == 'moon') { continue;}
+      if (i == 'sun') { continue;}
+      p.eccentric(.1).couple({radius:.2*p.aus});
+    }
+
+    universe.setup(); 
+  }
+</script>
+
+<div id='lefttext'>
+  <a href="http://en.wikipedia.org/wiki/Tycho_Brahe">Tycho Brahe's</a> geoheliocentric model had the Moon and Sun orbiting the Earth, and the rest of the planets orbit the Sun, not unlike the ancient Egyptian models in which the inner planets orbited the sun and the outer planets orbited Earth.
+
+  <p>As I'm lacking any parameters or specific details for Tycho's system, this model is just the modern relative distances scaled to the browser window, with the planets drawing eccentric elipses around the Sun by way of the Tusi couple.  That is to say, it is total and utter nonsense, while Tycho's system was an elegant, philisophically and religiously appealing synthesis of conflicting theories.
+ </div>
+
+<div id='righttext'>
+  Note the full phase of Venus when it is opposite the Sun from the Earth.
+
+  <p>A highly exaggerated Lunar model is included here merely for kicks.
+</div>
+

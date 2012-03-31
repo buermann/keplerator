@@ -1,0 +1,18 @@
+<script>
+  window.onload = function(){
+    var universe = new Universe();
+
+    universe.init({ sun:{},earth:{type:'center'},saturn:{} });
+    universe.planets.sun.eccentric(0);
+    universe.planets.sun.aus  = 5.46;
+    universe.min_planet_size  = 6;
+    universe.max_planet_size = 14;
+
+    universe.planets.saturn.aus = 60;
+    <%= render "saturn" %>
+
+    universe.setup(1); 
+  }
+</script>
+
+<div id='lefttext'>Ptolemy's Saturn works the same as Jupiter and Mars.</div>
