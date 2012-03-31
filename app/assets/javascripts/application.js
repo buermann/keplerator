@@ -1,3 +1,5 @@
+//= require jquery
+
 function Universe() {
 	this.origin = {
 		x: Math.ceil($(window).width() / 2),
