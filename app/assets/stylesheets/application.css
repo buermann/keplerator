@@ -6,6 +6,13 @@
  *= require_tree . 
 */
 body { color:#DDD; border:0; margin:0; padding:0; background-color:#003; background:url("/alex-mellinger-2009-western-edge.png") center center no-repeat;  background-attachment:fixed; background-size: 100% 100%; font-family:"Helvetica",Sans-serif; font-size:.8em;}
+
+a         { text-decoration:none; }
+a:link    {color:#A0A7A5;}
+a:active  {color:#FFFFFF;} 
+a:hover   {color:#FEFDF8;}
+a:visited {color:#AFACA8;}
+
 .text { margin: 5% 10% 0 10%; } 
 .right { float: right; } 
 #toptext { width:90%; margin: 0% 5% 0% 5%; } 
