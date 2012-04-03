@@ -1,0 +1,37 @@
+<script>
+  window.onload = function(){
+    var universe = new Universe();
+    universe.label  = false;
+
+    universe.init({
+      earth:{type:'center'},
+      /* moon:   {aus:1/15,mm:360/365*12 },
+      sun:    {aus:2/15,mm:360/365},
+      venus:  {aus:3/15,mm:360/365},
+      mercury:{aus:4/15,mm:360/365}, */
+      mars:   {aus:5/15,mm:360/(365*2)},
+      /* jupiter:{aus:6/15,mm:360/(365*12)},
+      saturn: {aus:7/15,mm:360/(365*30)} */
+    });
+
+    universe.satellitePaths    = true;
+    universe.includeSatellites = true;
+    universe.label             = true;
+
+    universe.rate = .5;
+    universe.min_planet_size = 4;
+    universe.max_planet_size = 12;
+
+    universe.planets.mars.epicycles({type:'hippopede',radius:universe.planets.mars.aus*.1,period:4  }) ;
+
+    universe.setup(); 
+  }
+</script>
+<div id='lefttext'>
+
+  <p>We would need to translate the extra motion of mars along that hippopede 
+</div>
+
+<div id='righttext'>
+</div>
+

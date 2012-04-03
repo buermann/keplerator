@@ -4,6 +4,7 @@
 
     // Ptolemy's Mars
     universe.init({ sun:{},earth:{type:'center'},mars:{}  });
+    universe.planets.sun.drawDeferent = false;
     universe.planets.sun.eccentric(0);
     universe.planets.sun.aus  = 45;
 

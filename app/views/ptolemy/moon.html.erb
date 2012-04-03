@@ -3,6 +3,7 @@
     var universe = new Universe();
 
     universe.init({ earth:{type:'center'},moon:{},sun:{},/*mars:{}*/});
+    universe.planets.sun.drawDeferent = false;
     universe.satellitePaths    = true;
     universe.includeSatellites = true;
     aus = universe.planets.moon.aus;

@@ -26,7 +26,6 @@ Keplerator::Application.routes.draw do
    match 'heracleides/:action' => 'heracleides' # 390BC, Turkey.  Some say he had mercury and venus orbit the sun, outer planets around the earth; the earth rotates, per Aryabhata, and according to Simplicius proposed the Sun was static and the Earth moved.  C.f. http://adsabs.harvard.edu/full/1992JHA....23..233E
    match 'capella/:action' => 'capella' # 400s CE, Martianus Capella, definitely proposed inner planets orbit the sun, http://en.wikipedia.org/wiki/File:Naboth_Capella.JPG
 
-
    match 'eudoxus/:action' => 'eudoxus' # 380bc, Eygpt
    match 'aristotle/:action' => 'aristotle'
 

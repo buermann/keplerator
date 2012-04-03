@@ -2,6 +2,7 @@
   window.onload = function(){
     var universe = new Universe();
     universe.init({ sun:{},earth:{type:'center'},jupiter:{} });
+    universe.planets.sun.drawDeferent = false;
     universe.planets.sun.eccentric(0);
     universe.planets.sun.aus  = 10;
     universe.max_planet_size  = 20;

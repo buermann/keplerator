@@ -6,6 +6,9 @@ function Universe() {
 		y: Math.ceil($(window).height() / 2)
 	};
 
+  //  We might be able to calculate something resembling a real start date from this: 
+  // June 27th, 1280 planetary positions
+  // http://books.google.com/books?id=PHdktsVb_X4C&pg=PA150&lpg=PA150
   this.day = Math.floor(Math.random()*3650+1)
 	this.rate = 2; // in days
 
@@ -15,9 +18,11 @@ function Universe() {
   this.max_aus = 0;
 	this.min_aus = 100;
 
+
   this.label    = false;
   this.displayDay = true;
   this.shadow   = true;
+
 
   this.base_period = this.bp = 365.26;
 	this.PlanetBase = {
@@ -132,8 +137,12 @@ Universe.prototype = {
       if (p.size > this.max_planet_size) p.size = this.max_planet_size;
       if (p.size < this.min_planet_size) p.size = this.min_planet_size;
 
+			p.meancenter = p.aus        * this.scale_factor;
       p._eccentric = p._eccentric * this.scale_factor;
-			p.meancenter = p.aus * this.scale_factor;
+
+      if (typeof p._equant === 'object') {
+        p._equant.radius = p._equant.radius * this.scale_factor;
+      }
 
       // the cycles won't be defined yet...
       for (var c in  p.cycles) {
@@ -195,7 +204,6 @@ Universe.prototype = {
 
 		if (day > 0) this.animate(day);
 		this.stopped = true;
-
 		console.log("stop");
 	},
 
@@ -264,6 +272,10 @@ Planet = function(universe,p) {
 
   this._deferent = 'circle';
 
+  this.drawEccentric = true; // draw line from the eccentric to the deferent
+  this.drawEquant    = true; // draw line from the equant to the deferent
+  this.drawDeferent  = true; // draw the deferent circle
+
   this.ctx = $('#dynamic')[0].getContext("2d");
 
   // create object methods for any given shit that is passed until we think of everything:
@@ -298,13 +310,20 @@ Planet = function(universe,p) {
   this.epicycles = function(es) {
     // type = tusi, epicycle, urdi, ellipse
     if (es == undefined) { return this.cycles; }
-    es.type = es.type || "epicycle";
-    this.cycles.push( es );
+    if (!( es instanceof Array)) {
+      es = [es];
+    }
+    for (i in es) {
+      var epi = es[i];
+      epi.type = epi.type || "epicycle";
+      this.cycles.push( epi );
+    }
     return this;
   };
+
   this.couple = function(es) {
-    // type = tusi, epicycle, urdi
     if (es == undefined) { return this.cycles; }
+    // type = tusi, epicycle, urdi, hippopede
     es.type = es.type || "tusi";
     this.cycles.push( es );
     return this;
@@ -316,81 +335,6 @@ Planet.prototype = {
   ctx: function() {
     return $('#dynamic')[0].getContext("2d");
   },
-
-
-  epicycle: function (e) {
-    // draw the epicycle
-    this.drawCircle(this.x, this.y, e.radius);
-
-    // calculate the epicyclic position
-    // The outer planets should be using the sun's mean motion for e.period
-    et = this.day * e.period * Math.PI/180 ;
-
-    epi_x = this.x - e.radius * Math.sin(et);
-    epi_y = this.y - e.radius * Math.cos(et);
-
-    // draw line to the point of rotation on the epicyle
-    this.drawLine(this.x, this.y, epi_x, epi_y);
-    this.x = epi_x; this.y = epi_y;
-  },
-
-  equant: function(_equant) {
-    if (_equant != undefined ) {
-      this._equant = (_equant) ? true : false;
-      return this;
-    }
-    // if there's no equant we move uniformly around the center
-    if (!this._equant) return this.meancenter;
-
-      // draw the line to the equant
-      this.drawLine(this.origin.x, this.origin.y, this.origin.x, this.origin.y-2*this._eccentric);
-
-      // via http://people.sc.fsu.edu/~dduke/mars.as
-      var gam = 180/Math.PI * Math.asin( this._eccentric / this.meancenter * Math.sin( this.t ) )
-      var rho = Math.sqrt(this.meancenter*this.meancenter+this._eccentric*this._eccentric-2*this._eccentric*this.meancenter*Math.cos((this.mm*this.day-gam)*Math.PI/180))
-      return rho; 
-  },
-
-  tusi: function(e) {
-    var t = this.t+3*Math.PI/2;  // elipse along x-axis, add PI/2, 3PI/2 along the y-axis
-    var a = 0.5*e.radius;
-    var b = 0.5*a;
-    p.aus = p.aus - e.radius; // if we're using the actual AUs to scale the universe, to maintain that same scale we need to forshorten the deferent of the planet's orbit by the total elongation of the tusi couple
-
-    // draw the tusi couple
-    this.drawCircle(this.x, this.y, e.radius);
-    // draw the connecting point of the couple
-    var ix = this.x + b*Math.cos(t) + b*Math.cos(t) 
-    var iy = this.y + b*Math.sin(t) + b*Math.sin(t)
-    this.drawCircle(ix, iy, .5*e.radius);
-
-    // draw the lines linking its bits up
-    var cx = this.x + a*Math.cos(t) - a*Math.cos(t) 
-    var cy = this.y + a*Math.sin(t) + a*Math.sin(t)
-    this.drawLine(ix,iy,cx,cy);
-    this.drawLine(this.x,this.y,cx,cy);
-    /* if you wanted to add an extension onto the couple:
-    this.drawLine(this.x,this.y,cx,cy-radius);
-*/
-    this.x = cx; this.y = cy;
-    return this;
-  },
-  urdi: function(e) {
-    var t = this.t;
-    return this;
-  },
-  ellipse: function(e) {
-    var t = this.t;
-    phi = 90*Math.PI/180;
-    this.last_ex = this.ex; this.lastey = this.ey;
-    a = e.radius+this.meancenter; b = this.meancenter;
-
-    this.ex = this.origin.x + a*Math.cos(t)*Math.cos(phi) - b*Math.sin(t)*Math.sin(phi);
-    this.ey = this.origin.y + a*Math.cos(t)*Math.sin(phi) - b*Math.sin(t)*Math.cos(phi);
-    //this.drawCircle(this.ex, this.ey, 1, {color:'#FF0'});
-    return this;
-  },
-
 
   drawLine: function(x1, y1, x2, y2, p) {
     p = p || {};
@@ -421,15 +365,6 @@ Planet.prototype = {
     ctx.closePath();
     ctx.stroke();
   },
-
-  renderToCanvas: function (width, height, renderFunction) {
-    var buffer = document.createElement('canvas');
-    buffer.width = width;
-    buffer.height = height;
-    renderFunction(buffer.getContext('2d'));
-    return buffer;
-  },
-
   drawPlanet: function(x, y, r, p) {
     if (!x || !y || !r) return; // don't bother if there's nothing to draw
       p = p || {}
@@ -460,12 +395,20 @@ Planet.prototype = {
       }
     });
 
-    // rotate the planet image so the sunny side faces the sun
+    // rotate the planet image so the sunny side faces the sun, or the center if there is no sun
     dctx = this.disc.getContext('2d');
     offset_x = -dctx.canvas.width/2;
     offset_y = -dctx.canvas.height/2;
 
-    angle = Math.atan2(this.universe.planets.sun.y-y, this.universe.planets.sun.x-x);
+    var cx,cy;
+    if ( this.universe.planets.sun ) {
+      cx = this.universe.planets.sun.x;
+      cy = this.universe.planets.sun.y;
+    } else { 
+      cx = this.origin.x;
+      cy = this.origin.y;
+    }
+    angle = Math.atan2(cy-y, this.universe.planets.cx-x);
     ctx.save();
     ctx.translate(x,y);
     ctx.rotate(Math.PI/2+angle);
@@ -482,6 +425,140 @@ Planet.prototype = {
       });
       ctx.drawImage(this.label,x+r+5,y+offset_y);
     }
+  },
+
+
+  renderToCanvas: function (width, height, renderFunction) {
+    var buffer = document.createElement('canvas');
+    buffer.width = width;
+    buffer.height = height;
+    renderFunction(buffer.getContext('2d'));
+    return buffer;
+  },
+
+
+  hippopede: function(e) {
+    a = e.radius*20; b = a*1; 
+    et = this.day * e.period * Math.PI/180 ;
+
+    //epi_x = this.x - 2*Math.cos(et)*Math.sqrt( Math.abs( a - b * Math.sin(et)*Math.sin(et) ) );
+    //epi_y = this.y - 2*Math.sin(et)*Math.sqrt( Math.abs( a - b * Math.sin(et)*Math.sin(et) ) );
+    
+    epi_x = this.x - 3*e.radius*Math.sin(et);
+    epi_y = this.y - e.radius*Math.sin(2*et);
+
+    //this.drawLine(this.x, this.y, epi_x, epi_y);
+    this.x = epi_x; this.y = epi_y;
+  },
+
+  epicycle: function (e) {
+    // draw the epicycle
+    this.drawCircle(this.x, this.y, e.radius);
+
+    // calculate the epicyclic position
+    // The outer planets should be using the sun's mean motion for e.period
+    et = this.day * e.period * Math.PI/180 ;
+
+    epi_x = this.x - e.radius * Math.sin(et);
+    epi_y = this.y - e.radius * Math.cos(et);
+
+    // draw line to the point of rotation on the epicyle
+    this.drawLine(this.x, this.y, epi_x, epi_y);
+    this.x = epi_x; this.y = epi_y;
+  },
+
+  equant: function(_equant) {
+    if (_equant != undefined ) {
+      this._equant = (_equant) ? _equant : false;
+      return this;
+    }
+
+    // if there's no equant we move uniformly around the center
+    if (!this._equant) return this.meancenter;
+
+    // draw the short line to the equant
+    this.drawLine(this.origin.x, this.origin.y, this.origin.x, this.origin.y-2*this._eccentric);
+
+    de = this._eccentric; // distance of the equant from the center, good for the basic equants
+
+    if (typeof this._equant === 'object') {
+      // If the equant is passed as an object we have a further complication, the equant is moving on an auxillary circle as in Ptolemy's model of Mercury.
+      eper = this._equant.period;
+      erad = this._equant.radius;
+
+      eqt = this.day * eper * Math.PI/180 ;
+      aux_x = this.origin.x - erad * Math.sin(eqt);
+      aux_y = this.origin.y-2*this._eccentric - erad * Math.cos(eqt);
+      this.drawCircle( this.origin.x, this.origin.y-2*this._eccentric, erad );
+      this.drawLine(this.origin.x, this.origin.y-2*this._eccentric, aux_x, aux_y );
+
+
+      this.x = aux_x; this.y = aux_y;
+      // so instead of using the _eccentric distance in our equant calculation we need
+      // to calculate the distance between the rotating equant and the center.
+      // Maybe?
+      dx = this.x - this.origin.x;
+      dy = this.y - this.origin.y;
+      de = Math.sqrt( dx*dx+dy*dy ) / 2;
+
+      this.equant_x = this.x;
+      this.equant_y = this.y;
+    } else {
+      this.equant_x = this.x;
+      this.equant_y = this.y - this._eccentric;
+
+      // shift the present y to the equant point
+      this.y = this.y - this._eccentric;
+    }
+
+      // calculate the point on the deferent circle from the equant point 
+      // via http://people.sc.fsu.edu/~dduke/mars.as
+      var gam = 180/Math.PI * Math.asin( de / this.meancenter * Math.sin( this.t ) )
+      // If the meancenter/deferent has the same radius as the eccentric, in say a mercury or moon model, you'll get a NaN here
+      var rho = Math.sqrt(this.meancenter*this.meancenter+de*de-2*de*this.meancenter*Math.cos((this.mm*this.day-gam)*Math.PI/180))
+      return rho; 
+  },
+
+  tusi: function(e) {
+    var t = this.t+3*Math.PI/2;  // elipse along x-axis, add PI/2, 3PI/2 along the y-axis
+    var a = 0.5*e.radius;
+    var b = 0.5*a;
+    p.aus = p.aus - e.radius; // if we're using the actual AUs to scale the universe, to maintain that same scale we need to forshorten the deferent of the planet's orbit by the total elongation of the tusi couple
+
+    // draw the tusi couple
+    this.drawCircle(this.x, this.y, e.radius);
+    // draw the connecting point of the couple
+    var ix = this.x + b*Math.cos(t) + b*Math.cos(t) 
+    var iy = this.y + b*Math.sin(t) + b*Math.sin(t)
+    this.drawCircle(ix, iy, .5*e.radius);
+
+    // draw the lines linking its bits up
+    var cx = this.x + a*Math.cos(t) - a*Math.cos(t) 
+    var cy = this.y + a*Math.sin(t) + a*Math.sin(t)
+    this.drawLine(ix,iy,cx,cy);
+    this.drawLine(this.x,this.y,cx,cy);
+    /* if you wanted to add an extension onto the couple:
+    this.drawLine(this.x,this.y,cx,cy-radius);
+*/
+    this.x = cx; this.y = cy;
+    return this;
+  },
+
+  urdi: function(e) {
+    var t = this.t;
+    return this;
+  },
+
+  ellipse: function(e) {
+    var t = this.t;
+    phi = 90*Math.PI/180;
+    this.last_ex = this.ex; this.lastey = this.ey;
+    a = e.radius+this.meancenter; b = this.meancenter;
+
+    this.ex = this.origin.x + a*Math.cos(t)*Math.cos(phi) - b*Math.sin(t)*Math.sin(phi);
+    this.ey = this.origin.y + a*Math.cos(t)*Math.sin(phi) - b*Math.sin(t)*Math.cos(phi);
+    //this.drawCircle(this.ex, this.ey, 1, {color:'#FF0'});
+    return this;
   },
 
   nextPoint: function(day) {
@@ -508,41 +585,49 @@ Planet.prototype = {
     // The period component calculated for the day:
     this.t = t = this.day * this.mm * Math.PI/180;
 
-    // find the deferent
-    eq = this.equant();
-    this.last_eq = eq;
- 
-    var def_x; var def_y; 
-    if (this._deferent == 'circle') {
-      this.x = ox -                   eq * Math.sin( this.t );
-      this.y = oy - this._eccentric - eq * Math.cos( this.t );
+    // Work from the origin outward 
 
-      // draw the line from the center of the deferent to the point
-      this.drawLine(ox, oy-this._eccentric, this.x, this.y);
-      // if the planet has an elliptical path let it hang in space
+    // start at the deferent center, which is offset by the eccentric
+    this.x = ox;
+    this.y = oy - this._eccentric;
+
+    // draw the line to the eccentric
+    if (this._eccentric) this.drawLine(ox, oy, this.x, this.y);
+
+    // draw the deferent circle around the eccentric
+    if (this._deferent == 'circle' && this.drawDeferent) this.drawCircle(this.x,this.y, this.meancenter);
+
+    // find the equant parameter for the movement of the deferent,
+    // and shift y to the equant point
+    eq = this.equant();
+
+    if (this._deferent == 'circle') {
+
+      this.x = this.x - eq * Math.sin( this.t );
+      this.y = this.y - eq * Math.cos( this.t );
+
+      // draw the line from the center of the deferent to the deferent point
+      if (this.drawEccentric) this.drawLine(ox, oy-this._eccentric, this.x, this.y);
+      
     } else if (this._deferent == 'ellipse') {
+      // if the planet has an elliptical path let it hang, unattached, in space
       phi = 90*Math.PI/180;
 
       var a = this.meancenter; // major axis is equal the mean distance to the focus
       var e = this.eccentricity*this.universe.eccentricityFactor;
       var b = a*Math.sqrt(Math.abs(1-e*e));
 
-      this.x = ox + a*Math.cos(t)*Math.cos(phi) - b*Math.sin(t)*Math.sin(phi);
-      this.y = oy + a*Math.cos(t)*Math.sin(phi) - b*Math.sin(t)*Math.cos(phi);
+      this.x = this.x + a*Math.cos(t)*Math.cos(phi) - b*Math.sin(t)*Math.sin(phi);
+      this.y = this.y + a*Math.cos(t)*Math.sin(phi) - b*Math.sin(t)*Math.cos(phi);
       //this.drawCircle(this.ex, this.ey, 1, {color:'#FF0'});
     }
 
-    // draw the line to the eccentric
-    if (this._eccentric) this.drawLine(this.origin.x, this.origin.y, this.origin.x, this.origin.y-this._eccentric);
+    // draw the line from the equant to the center to the deferent
+    if (this.drawEquant && this._equant) this.drawLine(this.equant_x,this.equant_y, this.x, this.y); 
 
-    // draw the line from the equant to the deferent
-    if (this._equant) this.drawLine(this.origin.x,this.origin.y-2*this._eccentric, this.x, this.y);
-    
-
-    var last_x, last_y;
     for (var e = 0; e < this.cycles.length; e++) {
       epi = this.cycles[e];
-      if (!epi || !epi.radius ) { break; }
+      if (!epi ) { break; }
       this[epi.type]( epi );
     }
 

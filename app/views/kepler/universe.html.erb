@@ -1,21 +1,30 @@
-http://farside.ph.utexas.edu/teaching/301/lectures/node151.html
-          AUs     Years   a^3/t^3
-Mercury   0.387   0.241   0.998
-Venus   0.723   0.615   0.999
-Earth   1.000   1.000   1.000
-Mars  1.524   1.881   1.000
-Jupiter   5.203   11.862  1.001
-Saturn  9.516   29.458  0.993
+<script>
+  window.onload = function(){
+    var universe = new Universe();
 
-kepler's orbital eccentricities:
-http://farside.ph.utexas.edu/teaching/301/lectures/node155.html
+    universe.init({sun:{type:'center'},
+      mercury:{},
+      venus:{},
+      earth:{},
+      mars:{},
+      jupiter:{},
+      saturn:{}
+    });
+    for (var i in universe.planets) {
+      universe.planets[i].elliptic();
+    }
+    universe.max_planet_size = 10;
+    universe.rate = 2;
+    universe.label = true;
+    universe.eccentricityFactor = 1;
 
-Planet  $e$
-Mercury   0.206
-Venus   0.007
-Earth   0.017
-Mars  0.093
-Jupiter   0.048
-Saturn  0.056
+    universe.setup(); 
+  }
+</script>
 
-the acceleration at the Earth's surface due to its axial rotation is only about $0.034 {\rm m/s^2}$. Moreover, the Earth's acceleration due to its orbital motion is only $0.0059 {\rm m/s^2}$
+<div id='lefttext'>
+  Kepler's model of the solar system.
+</div>
+
+<div id='righttext' >
+</div>

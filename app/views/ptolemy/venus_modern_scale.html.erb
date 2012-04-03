@@ -3,6 +3,7 @@
     var universe = new Universe();
     // Ptolemy's Venus
     universe.init({ sun:{},earth:{type:'center'},venus:{}  });
+    universe.planets.sun.drawDeferent = false;
     universe.planets.sun.eccentric(0);
     universe.max_planet_size = 15;
     //universe.planets.sun.aus  = 120;

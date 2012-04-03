@@ -1,0 +1,50 @@
+<script>
+  window.onload = function(){
+    var universe = new Universe();
+    universe.label  = false;
+
+    universe.init({
+      earth:{type:'center'},
+      /* moon:   {aus:1/15,mm:360/365*12 },
+      sun:    {aus:2/15,mm:360/365},
+      venus:  {aus:3/15,mm:360/365},
+      mercury:{aus:4/15,mm:360/365}, */
+      //mars:   {aus:5/15,mm:360/(365*2)},
+      mars:   {aus:5/15,mm:360/(365*2)},
+      /* jupiter:{aus:6/15,mm:360/(365*12)},
+      saturn: {aus:7/15,mm:360/(365*30)} */
+    });
+
+    universe.satellitePaths    = true;
+    universe.includeSatellites = true;
+    universe.label             = true;
+
+    universe.rate = .5;
+    universe.min_planet_size = 4;
+    universe.max_planet_size = 12;
+
+    universe.planets.mars.epicycles({type:'hippopede',radius:universe.planets.mars.aus*.1,period:4  }) ;
+
+    universe.setup(); 
+  }
+</script>
+<div id='lefttext'>
+  Eudoxus of Cnidus (408BC–355BC), one of Plato's students and a contemporary of Aristotle,
+  was the first to propose
+  a mathematical model of the planets in his lost work <em>On Speeds</em>.  We only
+  know what he proposed from commentaries in Aristotle, Simplicius, Theodosius of Bithynia,
+  and a poem by Aratus.  Each planet moved on a system
+  of three spheres whose sum of motions caused the planet to move about perpendicular to the
+  ecliptic in a sort of figure-8 hippopede, that is, you would flip Mars' figure-8 here on
+  it's side if you were looking straight down at the universe.
+
+  <p>When combined with the motion of a fourth sphere that moved the planet around the center
+  once a year would generate retrograde motion.  Our 2D plane is insufficient to really 
+  demonstrate how this works, it would be much clearer to look at 
+  <%= link_to "Todd Timberlake's model", "http://www.compadre.org/OSP/items/detail.cfm?ID=11198" %>.  The model predicted north-south lateral motions for the planets that were far too large, and was a poor predictor of planetary positions in general, but the method of generating retrograde motions from uniform circular motion was quite ingenius.
+
+ </div>
+
+<div id='righttext'>
+</div>
+
