@@ -467,58 +467,6 @@ Planet.prototype = {
     this.x = epi_x; this.y = epi_y;
   },
 
-  equant: function(_equant) {
-    if (_equant != undefined ) {
-      this._equant = (_equant) ? _equant : false;
-      return this;
-    }
-
-    // if there's no equant we move uniformly around the center
-    if (!this._equant) return this.meancenter;
-
-    // draw the short line to the equant
-    this.drawLine(this.origin.x, this.origin.y, this.origin.x, this.origin.y-2*this._eccentric);
-
-    de = this._eccentric; // distance of the equant from the center, good for the basic equants
-
-    if (typeof this._equant === 'object') {
-      // If the equant is passed as an object we have a further complication, the equant is moving on an auxillary circle as in Ptolemy's model of Mercury.
-      eper = this._equant.period;
-      erad = this._equant.radius;
-
-      eqt = this.day * eper * Math.PI/180 ;
-      aux_x = this.origin.x - erad * Math.sin(eqt);
-      aux_y = this.origin.y-2*this._eccentric - erad * Math.cos(eqt);
-      this.drawCircle( this.origin.x, this.origin.y-2*this._eccentric, erad );
-      this.drawLine(this.origin.x, this.origin.y-2*this._eccentric, aux_x, aux_y );
-
-
-      this.x = aux_x; this.y = aux_y;
-      // so instead of using the _eccentric distance in our equant calculation we need
-      // to calculate the distance between the rotating equant and the center.
-      // Maybe?
-      dx = this.x - this.origin.x;
-      dy = this.y - this.origin.y;
-      de = Math.sqrt( dx*dx+dy*dy ) / 2;
-
-      this.equant_x = this.x;
-      this.equant_y = this.y;
-    } else {
-      this.equant_x = this.x;
-      this.equant_y = this.y - this._eccentric;
-
-      // shift the present y to the equant point
-      this.y = this.y - this._eccentric;
-    }
-
-      // calculate the point on the deferent circle from the equant point 
-      // via http://people.sc.fsu.edu/~dduke/mars.as
-      var gam = 180/Math.PI * Math.asin( de / this.meancenter * Math.sin( this.t ) )
-      // If the meancenter/deferent has the same radius as the eccentric, in say a mercury or moon model, you'll get a NaN here
-      var rho = Math.sqrt(this.meancenter*this.meancenter+de*de-2*de*this.meancenter*Math.cos((this.mm*this.day-gam)*Math.PI/180))
-      return rho; 
-  },
-
   tusi: function(e) {
     var t = this.t+3*Math.PI/2;  // elipse along x-axis, add PI/2, 3PI/2 along the y-axis
     var a = 0.5*e.radius;
@@ -561,6 +509,61 @@ Planet.prototype = {
     return this;
   },
 
+
+  equant: function(_equant) {
+    if (_equant != undefined ) {
+      this._equant = (_equant) ? _equant : false;
+      return this;
+    }
+
+    // if there's no equant we move uniformly around the center
+    if (!this._equant) return this.meancenter;
+
+    // draw the short line to the equant
+    this.drawLine(this.origin.x, this.origin.y, this.origin.x, this.origin.y-2*this._eccentric);
+
+    de = (typeof this._equant === 'boolean') ? this._eccentric : this._equant;
+
+    if (typeof this._equant === 'object') {
+      // If the equant is passed as an object we have a further complication, the equant is moving on an auxillary circle as in Ptolemy's model of Mercury.
+      eper = this._equant.period;
+      erad = this._equant.radius;
+
+      eqt = this.day * eper * Math.PI/180 ;
+      aux_x = this.origin.x - erad * Math.sin(eqt);
+      aux_y = this.origin.y-2*this._eccentric - erad * Math.cos(eqt);
+
+      this.drawCircle( this.origin.x, this.origin.y-2*this._eccentric, erad );
+
+      this.drawLine(this.origin.x, this.origin.y-2*this._eccentric, aux_x, aux_y );
+
+      this.x = aux_x; this.y = aux_y;
+
+      // so instead of using the _eccentric distance in our equant calculation we need
+      // to calculate the distance between the rotating equant and the center.
+      // Maybe?
+      dx = this.x - this.origin.x;
+      dy = this.y - this.origin.y;
+      de = Math.sqrt( dx*dx+dy*dy ) / 2;
+
+      this.equant_x = this.x;
+      this.equant_y = this.y;
+
+    } else {
+      this.equant_x = this.x;
+      this.equant_y = this.y - this._eccentric;
+
+      // shift the present y to the equant point
+      this.y = this.y - this._eccentric;
+    }
+
+      // calculate the point on the deferent circle from the equant point 
+      // via http://people.sc.fsu.edu/~dduke/mars.as
+      var gam = 180/Math.PI * Math.asin( de / this.meancenter * Math.sin( this.t ) )
+      // If the meancenter/deferent has the same radius as the eccentric, in say a mercury or moon model, you'll get a NaN here
+      var rho = Math.sqrt(this.meancenter*this.meancenter+de*de-2*de*this.meancenter*Math.cos((this.mm*this.day-gam)*Math.PI/180))
+      return rho; 
+  },
   nextPoint: function(day) {
     this.day = day +this.offset;
     var ox,oy;
@@ -585,7 +588,7 @@ Planet.prototype = {
     // The period component calculated for the day:
     this.t = t = this.day * this.mm * Math.PI/180;
 
-    // Work from the origin outward 
+    // start drawing from the origin outward...
 
     // start at the deferent center, which is offset by the eccentric
     this.x = ox;
@@ -594,20 +597,27 @@ Planet.prototype = {
     // draw the line to the eccentric
     if (this._eccentric) this.drawLine(ox, oy, this.x, this.y);
 
-    // draw the deferent circle around the eccentric
-    if (this._deferent == 'circle' && this.drawDeferent) this.drawCircle(this.x,this.y, this.meancenter);
-
     // find the equant parameter for the movement of the deferent,
     // and shift y to the equant point
     eq = this.equant();
 
     if (this._deferent == 'circle') {
+      // draw the deferent 
+      if (this.drawDeferent) {
+        if (typeof this._equant == 'boolean') { 
+          this.drawCircle(ox,oy-this._eccentric, this.meancenter);
+        } else {
+          this.drawCircle(this.x,this.y, this.meancenter);
+        }
+      }
 
       this.x = this.x - eq * Math.sin( this.t );
       this.y = this.y - eq * Math.cos( this.t );
 
       // draw the line from the center of the deferent to the deferent point
       if (this.drawEccentric) this.drawLine(ox, oy-this._eccentric, this.x, this.y);
+
+
       
     } else if (this._deferent == 'ellipse') {
       // if the planet has an elliptical path let it hang, unattached, in space
