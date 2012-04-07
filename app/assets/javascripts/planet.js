@@ -159,7 +159,7 @@ Planet.prototype = {
       cx = this.origin.x;
       cy = this.origin.y;
     }
-    angle = Math.atan2(cy-y, this.universe.planets.cx-x);
+    var angle = Math.atan2(cy-y, cx-x);
     ctx.save();
     ctx.translate(x,y);
     ctx.rotate(Math.PI/2+angle);
