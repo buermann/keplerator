@@ -1,8 +1,6 @@
 <script>
   window.onload = function(){
-    var universe = new Universe();
-
-    universe.init({ earth:{type:'center'},sun:{}});
+    var universe = new Universe({ earth:{type:'center'},sun:{}});
     universe.planets.sun.drawDeferent = false;
     universe.planets.sun.eccentric(.05); 
     universe.setup(1); 
@@ -10,6 +8,5 @@
 </script>
 
 <div id='lefttext'>
-  The parameters here aren't exactly right, but Ptolemy's moon model moved in this general
-  fashion with respect to the mean sun.
- </div>
+  A simple eccentric sun.
+</div>

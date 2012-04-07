@@ -1,7 +1,6 @@
 <script>
   window.onload = function(){
-    var universe = new Universe();
-    universe.init({ sun:{},earth:{type:'center'},jupiter:{} });
+    var universe = new Universe({ sun:{},earth:{type:'center'},jupiter:{} });
     universe.planets.sun.drawDeferent = false;
     universe.planets.sun.eccentric(0);
     universe.planets.sun.aus  = 10;

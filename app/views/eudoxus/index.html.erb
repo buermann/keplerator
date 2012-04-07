@@ -23,7 +23,7 @@
     universe.min_planet_size = 4;
     universe.max_planet_size = 12;
 
-    universe.planets.mars.epicycles({type:'hippopede',radius:universe.planets.mars.aus*.1,period:4  }) ;
+    universe.planets.mars.deferent().cycles({type:'hippopede',radius:universe.planets.mars.aus*.1,mm:4  }) ;
 
     universe.setup(); 
   }

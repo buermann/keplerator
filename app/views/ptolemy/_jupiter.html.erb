@@ -1,4 +1,4 @@
 // jupiter's epicycle radius is .19 def, eccentric is 0.05 def
 universe.planets.jupiter.mm = 0.08;
-universe.planets.jupiter.eccentric(universe.planets.jupiter.aus*.05).equant(true).epicycles({type:'epicycle', period:universe.planets.sun.mm, radius:universe.planets.jupiter.aus*.19} );
+universe.planets.jupiter.eccentric(universe.planets.jupiter.aus*.05).equant(true).deferent().cycles({type:'epicycle', mm:universe.planets.sun.mm, radius:universe.planets.jupiter.aus*.19} );
 

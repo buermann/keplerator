@@ -1,9 +1,8 @@
 <script>
   window.onload = function(){
-    var universe = new Universe();
-    universe.label  = false;
+    var universe = new Universe({ sun:{type:'center'},mercury:{},venus:{},earth:{},moon:{},mars:{}/*,jupiter:{},saturn:{} */});
+    universe.label  = true;
 
-    universe.init({ sun:{type:'center'},mercury:{},venus:{},earth:{},moon:{},mars:{}/*,jupiter:{},saturn:{} */});
     universe.satellitePaths    = false;
     universe.includeSatellites = true;
 
@@ -13,13 +12,12 @@
 
     aus = universe.planets.moon.aus;
     mm  = universe.planets.moon.mm;
-    universe.planets.moon.deferent(mm*-0.8, aus*80*.25).epicycles({period:mm*0.9,radius:aus*80*.75}).epicycles({period:mm*.015,radius:aus*80*.1});
+    universe.planets.moon.deferent({mm:mm*-0.8, radius:aus*80*.25}).cycles({mm:mm*0.9,radius:aus*80*.75}).cycles({mm:mm*.015,radius:aus*80*.1});
 
     for (var i in universe.planets) {
       p = universe.planets[i];
       if (i == 'moon') { continue;}
-      p.eccentric(.1);
-      p.couple({radius:.2*p.aus});
+      p.eccentric(.1).deferent().couple({radius:.2*p.aus});
     }
 
     universe.setup(); 

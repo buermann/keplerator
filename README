@@ -1,13 +1,35 @@
 
-The Rails framework itself is almost superfluous to this project.  The simple HTML5 canvas animation library for building out the models is all in app/assets/javascripts/application.js.  The minimum required to set up a new model of the universe is the following:
+The Rails framework itself is mostly superfluous to this project.  The simple HTML5 canvas animation library for building out the models is all in app/assets/javascripts/.  The minimum required to set up a new model of the universe is the following:
 
 <script>
   window.onload = function(){
-    var universe = new Universe();
-    universe.init();
+    var universe = new Universe({ sun:{}, earth:{type:'center'} });
     universe.setup(); 
   }
 </script>
 
-Once things are a little more settled and rationalized maybe we'll write some actual documentation.
+All the planets as well as Pluto are built in with modern values for their parameters.
+
+Any given planet can be added manually, with these parameters defined at a minimum:
+
+<script>
+    universe.planets.xanax = new Planet(universe, {
+     name:'xanax', color: "#CC0", aus: 30, mm: .2, size: 70000 
+    });
+</script>
+
+Deferents are calculated as epicycles, if no epicycles are defined a basic deferent from
+the AUs (aus:) and mean movement (mm:) properties will be added.  Here's a more complex
+model:
+
+<script>
+   universe.planets.mercury.eccentric(6).cycles([
+    {mm:-mm,radius:3},
+    {mm:mm,radius:18,equant:3},
+    {mm:universe.planets.mercury.mm-mm,radius:6},
+   ]);
+</script>
+
+Note one can apply an arbitrary, static equant to any given cycle in this fashion.
+
 

@@ -1,9 +1,8 @@
 <script>
   window.onload = function(){
-    var universe = new Universe();
+    var universe = new Universe({ sun:{},mercury:{},venus:{},earth:{type:'center'},mars:{},jupiter:{},saturn:{} });
     universe.label  = true;
 
-    universe.init({ sun:{},venus:{},earth:{type:'center'},mars:{},jupiter:{},saturn:{} });
     universe.min_planet_size = 4;
     universe.rate = 5;
     universe.planets.venus.aus = 0.45 // push it back inside the sun's orbit.

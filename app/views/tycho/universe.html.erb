@@ -1,9 +1,8 @@
 <script>
   window.onload = function(){
-    var universe = new Universe();
-    universe.label  = false;
+    var universe = new Universe({ earth:{type:'center'},mercury:{center:'sun'},venus:{center:'sun'},sun:{center:'earth'},moon:{center:'earth'},mars:{center:'sun'}/*,jupiter:{},saturn:{} */});
+    universe.label  = true;
 
-    universe.init({ earth:{type:'center'},mercury:{center:'sun'},venus:{center:'sun'},sun:{center:'earth'},moon:{center:'earth'},mars:{center:'sun'}/*,jupiter:{},saturn:{} */});
     universe.satellitePaths    = true;
     universe.includeSatellites = true;
     universe.rate = 1;
@@ -12,13 +11,12 @@
 
     aus = universe.planets.moon.aus;
     mm  = universe.planets.moon.mm;
-    universe.planets.moon.deferent(mm*-0.8, aus*80*.25).epicycles({period:mm*0.9,radius:aus*80*.75}).epicycles({period:mm*.015,radius:aus*80*.1});
+    universe.planets.moon.deferent({mm:mm*-0.8,radius:aus*80*.25}).cycle({mm:mm*0.9,radius:aus*80*.75}).cycle({mm:mm*.015,radius:aus*80*.1});
 
     for (var i in universe.planets) {
       p = universe.planets[i];
-      if (i == 'moon') { continue;}
-      if (i == 'sun') { continue;}
-      p.eccentric(.1).couple({radius:.2*p.aus});
+      if (i == 'moon' || i == 'sun') { continue;}
+      p.eccentric(.1).deferent().couple({radius:.2*p.aus});
     }
 
     universe.setup(); 

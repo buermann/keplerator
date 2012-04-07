@@ -1,5 +1,6 @@
-// epi .66, ecc .10
-//universe.planets.mars.aus = 80;
-universe.planets.mars.eccentric(universe.planets.mars.aus*.1).equant(true).epicycles({type:'epicycle',
-  period:universe.planets.sun.mm, radius:universe.planets.mars.aus*.66} );
+m = universe.planets.mars
+universe.planets.mars.eccentric(universe.planets.mars.aus*.1)
+.cycles([
+{mm:m.mm, radius:m.aus, equant:m.aus*.2},
+{mm:universe.planets.sun.mm, radius:m.aus*.66}]);
 

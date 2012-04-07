@@ -1,8 +1,6 @@
 <script>
   window.onload = function(){
-    var universe = new Universe();
-    // Ptolemy's Venus
-    universe.init({ sun:{},earth:{type:'center'},venus:{}  });
+    var universe = new Universe({ sun:{},earth:{type:'center'},venus:{}  });
     universe.planets.sun.drawDeferent = false;
     universe.planets.sun.eccentric(0);
     universe.max_planet_size = 15;

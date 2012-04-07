@@ -1,30 +1,38 @@
 <script>
   window.onload = function(){
-    var universe = new Universe();
-
-    universe.init({ earth:{type:'center'},mercury:{},sun:{} });
-    universe.max_planet_size = 25;
+    var universe = new Universe( { earth:{type:'center'},mercury:{},sun:{} });
+    universe.rate = 1;
+    universe.label = true;
+    universe.max_planet_size = 10;
     universe.min_planet_size = 5;
 
-    universe.planets.sun.aus = 20;
+    universe.planets.sun.aus = 23;
+
     mm    = universe.planets.sun.mm;
 
     universe.planets.sun.drawDeferent     = false;
     universe.planets.mercury.drawDeferent = true;
-
     universe.planets.mercury.drawEccentric = false;
+    universe.planets.mercury.drawEquant   = false;
 
-    universe.rate = 1;
-    universe.planets.mercury.eccentric(1).equant(1).deferent(-mm,1).epicycles([{period:mm,radius:10},{period:mm*3.1,radius:3.3}]);
+    universe.eccentricityFactor =5;
 
-    //universe.planets.mercury.eccentric(1).equant({period:-mm,radius:1}).deferent(mm,10).epicycles([{period:mm*3.1,radius:3.3}]);
+    universe.planets.mercury.eccentric(6).cycles([
+    {mm:-mm,radius:3},
+    {mm:mm,radius:18,equant:3},
+    {mm:universe.planets.mercury.mm-mm,radius:6},
+    ]);
     universe.setup(1); 
   }
 </script>
 
 <div id='lefttext'>
-  <p>This is rather wrong, as the inner auxillary circle is supposed to move uniformly with
-  respect to it's center, and deferent should be moving uniformly with respect to the equant.
-  It's doing the opposite.
+  <p>In Ptoelemy's final model, Mercury's deferent center moves on an inner auxillary
+  circle with a radius of half
+  the eccentric, and the deferent moves with respect to an equant point at the eccentric,
+  which weaves these strange designs.
+  
+</div>
+<div id='righttext'>
 
 </div>

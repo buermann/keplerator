@@ -1,9 +1,7 @@
 <script type='text/javascript'>
   window.onload = function(){
-    var universe = new Universe();
-
+    var universe = new Universe({ sun:{},earth:{type:'center'},mars:{}  });
     // Ptolemy's Mars
-    universe.init({ sun:{},earth:{type:'center'},mars:{}  });
     universe.planets.sun.drawDeferent = false;
     universe.planets.sun.eccentric(0);
     universe.planets.sun.aus  = 45;

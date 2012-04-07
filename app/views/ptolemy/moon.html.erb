@@ -1,8 +1,6 @@
 <script>
   window.onload = function(){
-    var universe = new Universe();
-
-    universe.init({ earth:{type:'center'},moon:{},sun:{},/*mars:{}*/});
+    var universe = new Universe( { earth:{type:'center'},moon:{},sun:{},/*mars:{}*/});
     universe.planets.sun.drawDeferent = false;
     universe.satellitePaths    = true;
     universe.includeSatellites = true;
@@ -16,7 +14,7 @@
     /* universe.planets.mars.aus = aus*4;
     <%= render "mars" %> */
     universe.rate = .2
-    universe.planets.moon.deferent(mm*-0.8, aus*.25).epicycles({period:mm*0.9,radius:aus*.75}).epicycles({period:mm*.015,radius:aus*.1});
+    universe.planets.moon.deferent({mm:mm*-0.8,radius:aus*.25}).cycle({mm:mm*0.9,radius:aus*.75}).cycle({mm:mm*.015,radius:aus*.1});
     universe.setup(1); 
   }
 </script>

@@ -1,3 +1,3 @@
 // saturn's epicycle radius is 0.11 it's deferent radius, the eccentric is 0.06
-universe.planets.saturn.eccentric(universe.planets.saturn.aus*.06).equant(true).epicycles({type:'epicycle',
-  period:universe.planets.sun.mm, radius:universe.planets.saturn.aus*.11} );
+universe.planets.saturn.eccentric(universe.planets.saturn.aus*.06).equant(true).deferent().cycles({type:'epicycle',
+  mm:universe.planets.sun.mm, radius:universe.planets.saturn.aus*.11} );

@@ -1,11 +1,11 @@
 <script>
   window.onload = function(){
-    var universe = new Universe();
+    var universe = new Universe ({ sun:{},venus:{},earth:{type:'center'} });
 
-    universe.init({ sun:{},venus:{},earth:{type:'center'} });
     universe.max_planet_size = 10;
     universe.rate = .5;
-    universe.label = false;
+    universe.label = true;
+    universe.planets.sun.drawDeferent = false;
 
     universe.planets.sun.eccentric(.1);
     universe.planets.sun.name = 'eccentric sun';
@@ -15,7 +15,7 @@
     universe.planets.venus.color  = universe.planets.sun.color;
     universe.planets.venus.mm  = universe.planets.sun.mm;
     universe.planets.venus.aus = universe.planets.sun.aus;
-    universe.planets.venus.epicycles({period:0, radius:.1});
+    universe.planets.venus.deferent().cycles({mm:0, radius:.1});
     universe.planets.venus.name  = "epicyclic sun";
     universe.planets.venus.shadow  = false;
     universe.planets.venus.offset  = 182;
