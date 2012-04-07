@@ -1,0 +1,36 @@
+<script>
+  window.onload = function(){
+    var universe = new Universe ({ sun:{},earth:{type:'center'} });
+
+    universe.max_planet_size = 10;
+    universe.rate = .5;
+    universe.label = true;
+    universe.planets.sun.drawDeferent = false;
+    universe.planets.sun.name = 'sun';
+    universe.planets.sun.shadow = false;
+    // A History of Arabic Astronomy: Planetary Theories During the Golden Age of Islam, George Saliba, p.239
+    universe.planets.sun.cycles([
+      {radius:'60;0',mm:'0;59,8,9,51,46,57,32,3'}, // paraecleptic
+      {radius:'4;37',mm:'-0;59,8,9,51,46,57,32,3'}, // deferent
+      {radius:'2;30', mm:'2*0;59,8,9,51,46,57,32,3'} // the director, twice the speed of the paraecleptic
+    ]);
+
+
+    universe.setup(); 
+  }
+</script>
+
+<div id='lefttext'>
+  Ibn al-Shatir (1304–1375CE) was timekeeper (<em>muwaqqit</em>) at the Umayyad Mosque
+  in Damascus.  In his major astronomical treatise, awesomely titled <em>The Final Quest Concerning the Rectification of Principles</em>, he constructed a model of celestial mechanics with
+  no equants or
+  eccentrics, solving a variety of theoretical and physical problems of earlier models and
+  bringing the mechanics of the heavens in line with contemporary Aristotelian physics.
+
+  <p>This is his model of the Sun, as described by Geoege Saliba
+  in his <em>History of Arabic Astronomy</em>, <%= link_to "p.239", "http://books.google.com/books?id=mOquCzBX3xcC&pg=PA239&lpg=PA239" %>.
+ </div>
+
+<div id='righttext'>
+</div>
+

@@ -4,6 +4,7 @@ PlanetBase = {
 	// 360 degrees/earth days of it's year = mean motion in degrees/day,
 	// tropical rather than synodic
 	// size is the mean diameter of the body
+  //                                0.9856012177969429
 	sun: { color: "#EC0", aus: 1, mm: 0.985626283, period: 365.26, size: 1391000 },
 	mercury: { color: "silver", aus: 0.387, mm: 4.09235, period: 87.97, size: 4878, eccentricity: 0.2056 },
 	venus: { color: "#DCDBD6", aus: 0.723, mm: 1.60216, period: 224.7, size: 12104, eccentricity: 0.00677323 },

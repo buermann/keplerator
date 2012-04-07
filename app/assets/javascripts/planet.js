@@ -1,17 +1,41 @@
+Sexadecimal = function(sex) {
+    if (!sex || typeof sex != 'string') return sex; // nothing to do here
+
+    var factors = sex.split('*'); // it's common to want to pass parameters as factors of other parameters, so we'll allow it to be passed as a leading string in the sexa notation
+    sex         = factors[1] || factors[0] ;
+    sex = sex.replace(/[^-0-9]+/g,':'); // who cares what divider you're using?
+
+    var factor  = ( factors[1] ) ? factors[0] : 1;
+    var places = sex.split(':');
+    var sign = (places[0].match(/-/)) ? -1 : 1;
+
+    var dec = 0; // the decimal value we will return
+    var div = 1; // the initial divisor for the first place integer
+    for (var i in places) {
+      var p = places[i];
+      div = (i > 0) ? div*60 : div; // 60^ith
+      dec += p/div;
+    }
+    return factor*dec*sign;
+}
+
 Planet = function(universe,p) {
   this.name     = p.name;
   this.universe = universe;
   this.shadow   = true; // turn off the sun
   this.offset   = 0; // time offset for the planet from the universe, in days
 
+
   this.drawDeferent  = true;  // draw the deferent circle
 
   this.ctx = $('#dynamic')[0].getContext("2d");
 
-  // create object methods for any given shit that is passed until we think of everything:
+  // create object properties for any crud until we think of everything:
   for (i in p) {
     this[i] = p[i];
   }
+  this.aus = Sexadecimal(p.aus);
+  this.mm  = Sexadecimal(p.mm);
 
   this._eccentric = 0;
   this.eccentric = function(e) {
@@ -23,7 +47,7 @@ Planet = function(universe,p) {
   };
 
   this.elliptic = function(eccentricity) {
-    var c = {type:'ellipse',radius:this.aus,mm:this.mm};
+    var c = {type:'ellipse',radius:Sexadecimal(this.aus),mm:Sexadecimal(this.mm)};
     c.eccentricity = eccentricity || this.eccentricity || 0;
     this.cycle(c);
     return this;
@@ -33,6 +57,8 @@ Planet = function(universe,p) {
   this.cycle = function(e) {
     if (e == undefined) { return this._cycles.shift; }
     else { this._cycles.push( e ); }
+    e.radius = Sexadecimal(e.radius);
+    e.mm = Sexadecimal(e.mm);
     e.type = e.type || 'epicycle';
     return this;
   };
@@ -45,6 +71,8 @@ Planet = function(universe,p) {
     }
     for (i in es) {
       var epi = es[i];
+      epi.radius = Sexadecimal(epi.radius);
+      epi.mm = Sexadecimal(epi.mm);
       epi.type = epi.type || "epicycle";
       this._cycles.push( epi );
     }
@@ -55,8 +83,9 @@ Planet = function(universe,p) {
     if (eq) this._equant = eq;
     return this;
   };
+
   this.deferent = function(d) {
-    d = d || {type:'epicycle',mm:this.mm,radius:this.aus};
+    d = d || {type:'epicycle',mm:Sexadecimal(this.mm),radius:Sexadecimal(this.aus)};
     if (this._equant === true) { d.equant = this._eccentric*2; }
     else if (this._equant)     { d.equant = _equant; }
     this.cycle(d);
@@ -305,6 +334,8 @@ Planet.prototype = {
     for (var e = 0; e < this._cycles.length; e++) {
       epi = this._cycles[e];
       epi.cycle_number = e;
+
+      // convert sexadecimal to decimal 
       this.current_cycle = epi;
       if (!epi ) { break; }
       this[epi.type]( epi );

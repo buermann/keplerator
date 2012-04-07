@@ -1,5 +1,5 @@
 
-The Rails framework itself is mostly superfluous to this project.  The simple HTML5 canvas animation library for building out the models is all in app/assets/javascripts/.  The minimum required to set up a new model of the universe is the following:
+The Rails framework itself is mostly superfluous to this project until we allow users to build their own models.  The simple HTML5 canvas animation library for building out the models is all in app/assets/javascripts/.  The minimum required to set up a new model of the universe is the following:
 
 <script>
   window.onload = function(){
