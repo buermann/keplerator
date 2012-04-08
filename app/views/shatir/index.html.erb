@@ -3,6 +3,7 @@
     var universe = new Universe ({ sun:{},earth:{type:'center'} });
 
     universe.max_planet_size = 5;
+    universe.min_planet_size = 5;
     universe.rate = .5;
     universe.label = true;
     universe.planets.sun.drawDeferent = true;
@@ -11,10 +12,9 @@
     // A History of Arabic Astronomy: Planetary Theories During the Golden Age of Islam, George Saliba, p.239
     universe.planets.sun.cycles([
       {radius:'60;0',mm:'0;59,8,9,51,46,57,32,3',name:'parecleptic'}, // paraecleptic
-      {radius:'4;37',mm:'-0;59,8,9,51,46,57,32,3',name:'deferent'}, // deferent
-      {type:'urdi', radius:'2;30', mm:'2*0;59,8,9,51,46,57,32,3',name:'director'} // the director, twice the speed of the paraecleptic
+      {radius:'4*4;37',mm:'-0;59,8,9,51,46,57,32,3',name:'deferent'}, // deferent
+      {type:'urdi', radius:'4*2;30', mm:'2*0;59,8,9,51,46,57,32,3',name:'director'} // the director, twice the speed of the paraecleptic
     ]);
-
 
     universe.setup(); 
   }
