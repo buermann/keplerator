@@ -2,7 +2,7 @@ Keplerator::Application.routes.draw do
   # The priority is based upon order of creation:
   # first created -> highest priority.
    root :to => "home#index"
-   match '/:action' => 'home'
+   match '/about' => "home#about"
 
    # more like note keeping of the ground we want to cover, which needs to find a better home:
    
