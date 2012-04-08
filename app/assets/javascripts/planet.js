@@ -244,7 +244,18 @@ Planet.prototype = {
   },
 
   urdi: function(e) {
-    var t = this.t;
+    // Urdi's Lemma regards a particular arrangement of epicycles:
+    // an epicycle (the director) radius 1x and velocity 2k on an epicycle (the deferent)
+    // of radius 2x and velocity 1k.
+
+    // We just draw some extra lines on the final director of epicycles that follow
+    // urdi's lemma
+    this.drawLine(this.origin.x,this.origin.y,this.origin.x,this.origin.y-e.radius);
+    this.drawLine(this.origin.x,this.origin.y,this.origin.x,this.origin.y-2*e.radius);
+
+    this.drawLine(this.origin.x,this.origin.y-2*e.radius,this.x,this.y);
+    this.epicycle(e);
+    this.drawLine(this.origin.x,this.origin.y-e.radius,this.x,this.y);
     return this;
   },
 
@@ -258,11 +269,23 @@ Planet.prototype = {
     this.last_ex = this.ex; this.lastey = this.ey;
     this.x = this.origin.x + a*Math.cos(t)*Math.cos(phi) - b*Math.sin(t)*Math.sin(phi);
     this.y = this.origin.y + a*Math.cos(t)*Math.sin(phi) - b*Math.sin(t)*Math.cos(phi);
+
     return this;
 
   },
 
   epicycle: function (e) {
+    if (this.universe.label && e.name) {
+      var fs = 8;
+      var ctx  = this.ctx;
+      e.label = e.label || this.renderToCanvas(e.name.length*fs,fs,function(ctx) {
+        ctx.fillStyle = p.color; 
+        ctx.font = fs+'pt Helvetica';
+        ctx.fillText(e.name,0,ctx.canvas.height);
+      });
+      ctx.drawImage(e.label,this.x-.5*e.radius-.75*fs*e.name.length,this.y-.9*e.radius);
+    }
+
     // This function defines the behavior of both deferents and epicycles.
     // draw the epicycle unless it's the first one
     if (!(!this.drawDeferent && e.cycle_number == 0)) {
@@ -280,6 +303,7 @@ Planet.prototype = {
     // draw line to the point of rotation on the epicyle
     this.drawLine(this.x, this.y, epi_x, epi_y);
     this.x = epi_x; this.y = epi_y;
+
   },
 
   equant_angle: function(c) {
