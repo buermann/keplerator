@@ -166,9 +166,12 @@ Planet.prototype = {
         ctx.fillStyle = grd;
         ctx.fill();
       } else { 
-        var grd = ctx.createRadialGradient(x,y,r,x,y-r,r);
-        grd.addColorStop(0, "#222");
-        grd.addColorStop(.6, "#100");
+        //var grd = ctx.createRadialGradient(x,y,r,x,y-r,r);
+        // Chrome quietly dies without explanation if the radii of the two
+        // gradient circles are the same size
+        var grd = ctx.createRadialGradient(x,y,r, x,-r*.6,r*.99);
+        grd.addColorStop(0, "#211");
+        grd.addColorStop(.3, "#100");
         grd.addColorStop(1, p.color);
         ctx.fillStyle = grd;
         ctx.fill();
