@@ -5,6 +5,7 @@ Keplerator::Application.routes.draw do
    match '/about' => "home#about"
 
    # more like note keeping of the ground we want to cover, which needs to find a better home:
+   match 'glossary/:action' => 'glossary' # 1000BC
    
    # the Sanskrit tradition
    match 'lagadha/:action' => 'lagadha' # 1000BC

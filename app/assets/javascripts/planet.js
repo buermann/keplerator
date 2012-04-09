@@ -226,7 +226,8 @@ Planet.prototype = {
   },
 
   tusi: function(e) {
-    var t = this.t+3*Math.PI/2;  // elipse along x-axis, add PI/2, 3PI/2 along the y-axis
+    e.mm = e.mm || 1;
+    var t = e.mm*this.t+3*Math.PI/2;  // elipse along x-axis, add PI/2, 3PI/2 along the y-axis
     var a = 0.5*e.radius;
     var b = 0.5*a;
 
@@ -286,7 +287,7 @@ Planet.prototype = {
         ctx.font = fs+'pt Helvetica';
         ctx.fillText(e.name,0,ctx.canvas.height);
       });
-      ctx.drawImage(e.label,this.x-.5*e.radius-.75*fs*e.name.length,this.y-.9*e.radius);
+      ctx.drawImage(e.label,this.x-.5*e.radius-.75*fs*e.name.length-this.size,this.y-.9*e.radius);
     }
 
     // This function defines the behavior of both deferents and epicycles.
@@ -367,7 +368,6 @@ Planet.prototype = {
       if (!epi ) { break; }
       this[epi.type]( epi );
     }
-
 
     // draw the planet
     this.drawPlanet(this.x, this.y, this.size, { fill: true, color: this.color });

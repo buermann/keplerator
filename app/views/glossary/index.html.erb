@@ -1,0 +1,24 @@
+<script>
+  window.onload = function(){
+    var universe = new Universe ({ earth:{type:'center'} });
+    universe.rate = 1;
+    universe.label = true;
+    universe.setup();
+  }
+</script>
+
+<div id='lefttext'>
+  I guess we should start from beginning.  In the beginning, man stood on some earth,
+  and we called it the Earth.  And we looked up and saw some stars, the Sun, and the Moon.
+  And looking up night after night, we noticed some of the stars didn't behave like the other
+  stars, but wandered about on their own, and we called them wanderers, or "planets" in Greek.
+  And over our lifetimes they appeared to wander in peculiar patterns, and we sensibly
+  began, around 1200 B.C., to record their movements and pick up a knack for predicting
+  where they would wander to next. Around the time of Eodoxus in 400BC, we began to
+  devise models of how such patterns could be
+  described geometrically with rotating spheres.  And the first sphere was called a
+  <%= link_to 'deferent', '/glossary/deferent' %>.
+
+</div>
+<div id='righttext'>
+</div>

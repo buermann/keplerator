@@ -1,0 +1,37 @@
+<script>
+  window.onload = function(){
+    var universe = new Universe ({ mars:{},sun:{type:'center'} });
+    universe.rate = .5;
+    universe.label = true;
+    universe.planets.mars.drawDeferent = true;
+
+    cycles = [{radius:'120;0',mm:1,name:'deferent'}];
+    c = Math.floor(Math.random()*8)+2;
+
+    for (i=1;i<c;i++) {
+      cycles.push( {radius:cycles.length*(Math.random()*20+2),mm:10-Math.random()*20,name:'epicycle ' + i} ) ;
+    }
+    console.log(c,cycles);
+    universe.planets.mars.cycles(cycles);
+    universe.setup();
+  }
+</script>
+
+<div id='lefttext'>
+  An epicycle is a circle whose center travels upon a circle.
+  
+  <p>Here a random number of random epicycles upon random epicycles move Mars on some insane, nonsensical orbit around, or perhaps through, the Sun.
+
+</div>
+<div id='righttext'>
+  Epicycles upon epicycles can be used to compose any arbitrary curve, as
+  discussed in detail in Norwood Hanson's 
+  <%= link_to "famous paper", "http://www.u.arizona.edu/~aversa/scholastic/Mathematical%20Power%20of%20Epicyclical%20Astronomy%20%28Hanson%29.pdf" %> equating epicycles with terms in a
+  <%= link_to "Fourier series", "http://en.wikipedia.org/wiki/Fourier_series" %>.
+  In that sense this ancient device is still used every day by modern scientists
+  to solve complex problems.
+
+  <p>They're also the perfect tool for modelling the heavens in a geocentric
+  coordinate frame, or indeed any other coordinate frame.  If you wanted to model a
+  universe that revolves around yourself you just need the right epicycles.
+</div>

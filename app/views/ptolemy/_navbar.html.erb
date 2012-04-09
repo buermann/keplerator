@@ -1,0 +1,4 @@
+<%= link_to "Ptolemy's Sun", "/ptolemy/sun" %> |
+<% %w(moon mercury venus mars jupiter saturn universe).each do |t| %>
+<%= link_to t.capitalize.gsub("_"," "), "/ptolemy/#{t}" %> |
+<% end %>

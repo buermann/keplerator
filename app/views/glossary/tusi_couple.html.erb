@@ -1,0 +1,36 @@
+<script>
+  window.onload = function(){
+    var universe = new Universe ({ sun:{},earth:{type:'center'} });
+    universe.rate = .5;
+    universe.min_planet_size = 0;
+    universe.label = true;
+
+    universe.planets.earth.size = 0;
+    universe.planets.earth.name = " ";
+
+    universe.planets.sun.name = '  ';
+    universe.planets.sun.size = 0;
+    universe.planets.sun.cycles([
+    {type:'tusi',radius:'60;0',mm:-2},
+    ]);
+    universe.setup(1);
+  }
+</script>
+
+<div id='lefttext'>
+  The Tusi couple is a device constisting of two circles, one half the size of the other.
+  The smaller circle is rolled inside the circumferance of the larger circle.  A point on
+  the smaller circle will trace, back and forth, the diameter of the larger circle,
+  creating a linear harmonic motion out of constant circular motion.
+
+</div>
+<div id='righttext'>
+  The clever invention of a very clever man by the name of <%= link_to "Nasir al-Din al-Tusi",
+  "http://en.wikipedia.org/wiki/Nasir_al-Din_al-Tusi" %> (d.1274 CE),
+  it was originally invented to solve the problem of the latitidunal (north/south) motions
+  of the heavens.  Al-Tusi's predecessors had used simple epicycles to push orbits north
+  or south over the course of the year, but such an epicycle also pushes 
+  the orbits an equal distance east and west as they do north and south, knocking
+  them out of alignment with the longtitudinal motions.  The couple solved this problem, and
+  a great many more, in geometric astronomy.
+</div>

@@ -1,0 +1,33 @@
+<script>
+  window.onload = function(){
+    var universe = new Universe ({ sun:{},earth:{type:'center'} });
+    universe.rate = .5;
+    universe.label = true;
+    universe.planets.sun.drawDeferent = true;
+    universe.planets.sun.name = 'sun';
+    universe.planets.sun.cycles([
+    {radius:'60;0',mm:'0;59,8,9,51,46,57,32,3',equant:40}, // paraecleptic
+    ]);
+    universe.setup();
+  }
+</script>
+
+<div id='lefttext'>
+  The equant is an off-center point around which a circle moves with uniform
+  angular velocity, creating a non-uniform motion around the center.
+  <p>When the point moving on the equant -- here the Sun but usually
+  an epicycle -- is closer to the equant it will travel slower with respect to the
+  center.  
+</div>
+
+<div id='righttext'>
+  Here's it's highly exaggerated so you can't miss it.  Most
+  often, as the equants are generally quite small, it's noticeable only in the relationship
+  with the sun's orbit: the equant angle will appear
+  to wobble back and forth around the mean sun, as in
+  <%= link_to "Ptolemy's model of Venus", "/ptolemy/venus" %>.
+
+  <p>Together the eccentric and equant can be thought of as an approximation of Kepler's
+  second law, in which an elliptical orbit sweeps out an equal area per unit time,
+  rather than an equal distance.
+</div>

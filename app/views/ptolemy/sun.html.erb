@@ -1,12 +1,39 @@
 <script>
   window.onload = function(){
-    var universe = new Universe({ earth:{type:'center'},sun:{}});
+    var universe = new Universe ({ sun:{},venus:{},earth:{type:'center'} });
+
+    universe.max_planet_size = 10;
+    universe.rate = .5;
+    universe.label = true;
     universe.planets.sun.drawDeferent = false;
-    universe.planets.sun.eccentric(.05); 
-    universe.setup(1); 
+
+    universe.planets.sun.eccentric(.1);
+    universe.planets.sun.name = 'eccentric sun';
+    universe.planets.sun.shadow = false;
+
+    // create a clone of the sun that moves about an equivalent epicycle
+    universe.planets.venus.color  = universe.planets.sun.color;
+    universe.planets.venus.mm  = universe.planets.sun.mm;
+    universe.planets.venus.aus = universe.planets.sun.aus;
+    universe.planets.venus.deferent().cycles({mm:0, radius:.1});
+    universe.planets.venus.name  = "epicyclic sun";
+    universe.planets.venus.shadow  = false;
+    universe.planets.venus.offset  = 182;
+
+    universe.planets.sun.size = universe.planets.venus.size;
+
+    universe.setup(); 
   }
 </script>
 
 <div id='lefttext'>
-  A simple eccentric sun.
+  Ptolemy, in the Almagest and the Handy Tables, used two different models for the Sun: one with an eccentric and one with an equant.  What we have here is a simple demonstration of Ptolemy's proof of Apollonius' proposal that an eccentric and a static epicycle with no angular velocity with respect to it's own center are equivalent.  The epicyclic model had the advantage of perserving the Aristotelian principle of the Earth as the center of the universe.
+  
+  <p>For clarity, we hope, the eccentric Sun is offset half a year ahead of the epicyclic Sun.
+
+  <p>The sun's position in subsequent animations is the "mean sun", which is just a representation of the sun's position with respect to the center of the universe and niether to scale nor eccentric.
+ </div>
+
+<div id='righttext'>
 </div>
+

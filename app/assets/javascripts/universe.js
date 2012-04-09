@@ -42,12 +42,12 @@ Universe = function(conf) {
 	this.shadow = true;
 
 	var dynamic = $('#dynamic')[0];
-	var static = $('#static')[0];
+	var static  = $('#static')[0];
 
 	this.center = {};
 
 	this.h = static.height = dynamic.height = Math.floor($(window).height()) * .95;
-	this.w = static.width = dynamic.width = Math.floor($(window).width()) * .6;
+	this.w = static.width  = dynamic.width  = Math.floor($(window).width())  * .50;
 	this.origin = { x: this.w / 2, y: this.h / 2 };
 
 	this.addPlanets();

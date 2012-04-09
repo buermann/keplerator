@@ -1,0 +1,19 @@
+<script>
+  window.onload = function(){
+    var universe = new Universe ({ sun:{},earth:{type:'center'} });
+    universe.rate = .5;
+    universe.label = true;
+    universe.planets.sun.drawDeferent = true;
+    universe.planets.sun.name = 'sun';
+    universe.planets.sun.eccentric(30).cycles([
+    {radius:'60;0',mm:'0;59,8,9,51,46,57,32,3',name:'eccentric deferent'}, // paraecleptic
+    ]);
+    universe.setup();
+  }
+</script>
+
+<div id='lefttext'>
+  The eccentric is a center of circular motion offset from the 'center' of the universe, be it the  Earth or the Sun.  
+</div>
+<div id='righttext'>
+</div>

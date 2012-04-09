@@ -1,0 +1,24 @@
+<script>
+  window.onload = function(){
+    var universe = new Universe ({ sun:{},earth:{type:'center'} });
+    universe.rate = .5;
+    universe.label = true;
+    universe.planets.sun.drawDeferent = true;
+    universe.planets.sun.name = 'sun';
+    universe.planets.sun.cycles([
+    {radius:'60;0',mm:'0;59,8,9,51,46,57,32,3',name:'deferent'}, // paraecleptic
+    ]);
+    universe.setup();
+  }
+</script>
+
+<div id='lefttext'>
+  The deferent generally refers to the dominant circle in a model of an orbit.
+  Usually this is just the first circle, but in some cases, such as Ptolemy's Mercury,
+  the deferent itself travels on an auxillary circle.  In other cases a later astronomer,
+  such as Ibn al-Shatir, will have their own peculiar names for the circles.
+
+  <p>Here the Sun moves about on a simple deferent.
+</div>
+<div id='righttext'>
+</div>
