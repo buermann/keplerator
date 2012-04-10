@@ -11,7 +11,6 @@
     for (i=1;i<c;i++) {
       cycles.push( {radius:cycles.length*(Math.random()*20+2),mm:10-Math.random()*20,name:'epicycle ' + i} ) ;
     }
-    console.log(c,cycles);
     universe.planets.mars.cycles(cycles);
     universe.setup();
   }
@@ -26,7 +25,8 @@
 <div id='righttext'>
   Epicycles upon epicycles can be used to compose any arbitrary curve, as
   discussed in detail in Norwood Hanson's 
-  <%= link_to "famous paper", "http://www.u.arizona.edu/~aversa/scholastic/Mathematical%20Power%20of%20Epicyclical%20Astronomy%20%28Hanson%29.pdf" %> equating epicycles with terms in a
+  <%= link_to "famous paper", "http://www.u.arizona.edu/~aversa/scholastic/Mathematical%20Power%20of%20Epicyclical%20Astronomy%20%28Hanson%29.pdf" %> where he pointed out that 
+  epicycles are just terms in a
   <%= link_to "Fourier series", "http://en.wikipedia.org/wiki/Fourier_series" %>.
   In that sense this ancient device is still used every day by modern scientists
   to solve complex problems.
