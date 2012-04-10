@@ -1,21 +1,20 @@
 <script>
   window.onload = function(){
-    var universe = new Universe();
-
-    universe.init({sun:{type:'center'},
+    var universe = new Universe( {sun:{type:'center'},
       mercury:{},
       venus:{},
       earth:{},
       mars:{},
-      jupiter:{},
-      saturn:{}
+      /*jupiter:{},
+      saturn:{} */
     });
     for (var i in universe.planets) {
       universe.planets[i].elliptic();
     }
     universe.max_planet_size = 10;
-    universe.rate = 2;
+    universe.rate = .5;
     universe.label = true;
+
     universe.eccentricityFactor = 1;
 
     universe.setup(); 
@@ -23,7 +22,8 @@
 </script>
 
 <div id='lefttext'>
-  Kepler's model of the solar system.
+  Kepler's final model of the solar system abandoned circles entirely
+  and adopted the ellipse.
 </div>
 
 <div id='righttext' >
