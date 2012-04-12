@@ -6,15 +6,8 @@
     universe.min_planet_size = 5;
     universe.rate = .5;
     universe.label = true;
-    universe.planets.sun.drawDeferent = true;
-    universe.planets.sun.name = 'sun';
-    universe.planets.sun.shadow = false;
-    // A History of Arabic Astronomy: Planetary Theories During the Golden Age of Islam, George Saliba, p.239
-    universe.planets.sun.cycles([
-      {radius:'60;0',mm:'0;59,8,9,51,46,57,32,3',name:'parecleptic'}, // paraecleptic
-      {radius:'4;37',mm:'-0;59,8,9,51,46,57,32,3',name:'deferent'}, // deferent
-      {type:'urdi', radius:'2;30', mm:'2*0;59,8,9,51,46,57,32,3',name:'director'} // the director, twice the speed of the paraecleptic
-    ]);
+
+    <%= render 'sun' %>
 
     universe.setup(); 
   }
@@ -30,7 +23,7 @@
  </div>
 
 <div id='righttext'>
- This is his model of the Sun, as described by Geoege Saliba
+  This is his model of the Sun, as described by George Saliba
   in his <em>History of Arabic Astronomy</em>, <%= link_to "p.239", "http://books.google.com/books?id=mOquCzBX3xcC&pg=PA239&lpg=PA239" %>.  The Sun travels on a pair of epicycles (the clockwise deferent and half-sized, twice-as-fast counter-clockwise director) that re-create 
   uniform motion around an off-center point (the first point 'north' of Earth) without resorting to the equant or eccentric models of Ptolemaeus.  This alternative to the equant is now known as Urdi's Lemma, after the astronomer and architect <%= link_to "Mu'ayyad al-Din al-'Urdi","http://en.wikipedia.org/wiki/Mu%27ayyad_al-Din_al-%27Urdi" %> (d.1266CE) who devised it, and which was later used by Copernicus, who utilized it without offering any corresponding geometric proof. 
   

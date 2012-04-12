@@ -12,27 +12,46 @@
 
     aus = universe.planets.moon.aus;
     mm  = universe.planets.moon.mm;
-    universe.planets.moon.deferent({mm:mm*-0.8, radius:aus*80*.25}).cycles({mm:mm*0.9,radius:aus*80*.75}).cycles({mm:mm*.015,radius:aus*80*.1});
+    universe.planets.moon.cycles([
+    {mm:mm*-0.8, radius:aus*80*.25},
+    {mm:mm*0.9,radius:aus*80*.75},
+    {mm:mm*.015,radius:aus*80*.1}
+    ]);
 
     for (var i in universe.planets) {
       p = universe.planets[i];
-      if (i == 'moon') { continue;}
-      p.eccentric(.1).deferent().couple({radius:.2*p.aus});
+      console.log(i,p);
+
+      if (i == 'moon') {
+        p.cycles([
+        // scale Ibn al-Shatir's model into view:
+          {mm:"13;13,45,39,40", radius:.060},
+          {mm:"-13;3,53,46,18",radius:.006583333333333333 },
+          {mm:"24;22,53,23",radius:.0014166666666666667},  
+          ]) ;
+        continue;
+      }
+      if (i == 'earth') { 
+        p.eccentric(p.eccentricity).deferent();
+        continue;
+      }
+      // http://farside.ph.utexas.edu/syntaxis/Almagest/node4.html
+      eccentric = p.eccentricity || 0;
+      p.eccentric(eccentric).cycles([
+        {radius:p.aus, mm:.5*p.mm},
+        {radius:p.aus*.1, mm:p.mm},
+      ]);
     }
     universe.setup(); 
   }
 </script>
 
 <div id='lefttext'>
-  Here we have a very rough sketch of what Copernicus proposed, sort of, just to make sure this general structure of things is working properly.  There's a heliostatic Sun at a small eccentric to the center of the universe, using al-Tusi's couple to create (highly exaggerated) eliptical paths.  Because there was no equant, however, the calculations of planetary positions was considerably simpler.
-
-  <p>The great innovation to medieval eyes was ridding the model of the equant.  To Kepler's eyes the great innovation was explaining the retrograde motions of the planets without "the hundred-times-more-absurd spirals".
+  Here we have a first draft based on <%= link_to "Richard Fitzpatrick's description", "http://farside.ph.utexas.edu/syntaxis/Almagest/node4.html" %> of Copernicus' heliostatic universe.  The Earth moves on a uniform circular orbit at a small eccentric to the Sun while the Moon moves about the Earth per <%= link_to "Ibn al-Shatir's lunar model", "/shatir/moon/" %> (greatly exaggerated here to scale into frame).  The planets move about the Sun on epicycles that rotate twice as fast as their deferents, with eccentrics about equal to the eliptical eccentricity of their modern orbits.  There's a missing epicycle for Mercury that Fitzpatrick mentions but does not describe.
   
- </div>
+</div>
 
 <div id='righttext'>
-  Note the full phase of Venus when it is opposite the Sun from the Earth.
-
-  <p>A highly exaggerated Lunar model is included here merely for kicks.
+  <p>The great innovation to medieval eyes was ridding the model of the equant.  To Kepler's eyes the great innovation was explaining the retrograde motions of the planets without "the hundred-times-more-absurd spirals".
 </div>
 

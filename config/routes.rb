@@ -5,7 +5,7 @@ Keplerator::Application.routes.draw do
    match '/about' => "home#about"
 
    # more like note keeping of the ground we want to cover, which needs to find a better home:
-   match 'glossary/:action' => 'glossary' # 1000BC
+   match 'lexicon/:action' => 'lexicon' # 1000BC
    
    # the Sanskrit tradition
    match 'lagadha/:action' => 'lagadha' # 1000BC
@@ -44,6 +44,9 @@ Keplerator::Application.routes.draw do
    match 'copernicus/:action' => 'copernicus'
    match 'tycho/:action'      => 'tycho'
    match 'gilbert/:action'    => 'gilbert' # william
+   # http://books.google.com/books?id=hMgXh8jMSGgC&pg=PA29
+   match 'roslin/:action'     => 'roslin' # helisaeus roslin
+   match 'rothmann/:action'    => 'rothmann' # christoph rothmann
    match 'ursus/:action'      => 'ursus' # Nicholas Reymers Bär aka Ursus, see also, John Craig and Helisaeus Roeslin
    match 'kepler/:action' => 'kepler'
 

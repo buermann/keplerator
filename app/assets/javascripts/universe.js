@@ -130,7 +130,7 @@ Universe.prototype = {
 
 			for (var c in p._cycles) {
 				p._cycles[c].radius = p._cycles[c].radius * this.scale_factor;
-				p._cycles[c].equant = p._cycles[c].equant * this.scale_factor;
+				if (p._cycles[c].equant) p._cycles[c].equant = p._cycles[c].equant * this.scale_factor;
 			}
 
 			// somebody has established a single eccentric for the universe
@@ -173,6 +173,7 @@ Universe.prototype = {
 	},
 
 	drawTrail: function(disc) {
+    if (disc.static_x) return ;
 		ctx = $('#static')[0].getContext("2d");
 		ctx.lineWidth = 1;
 		ctx.strokeStyle = "#050";

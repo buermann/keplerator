@@ -1,0 +1,38 @@
+<script>
+  window.onload = function(){
+    var universe = new Universe({ sun:{},earth:{type:'center'},moon:{} });
+    universe.label  = true;
+
+    universe.satellitePaths    = true;
+    universe.includeSatellites = true;
+
+    universe.rate = .15;
+    universe.min_planet_size = 5;
+    universe.max_planet_size = 5;
+
+    universe.planets.sun.name = 'mean sun';
+    universe.planets.sun.aus  = .035;
+
+    // http://articles.adsabs.harvard.edu/full/gif/1989JHA....20..157S/0000161.000.html
+    // doesn't actually provide many of the parameters for the model, the auxillary
+    // circle travels 3n while the deferent travels at -2n...
+    aus = universe.planets.moon.aus;
+    mm = universe.planets.moon.mm;
+    universe.planets.moon.cycles([
+      {mm:"3*13;13,45,39,40",radius:aus*1},
+      {mm:"-2*13;13,45,39,40",radius:aus*8},
+      {mm:"24;22,53,23",     radius:aus*3},
+    ]);
+
+    universe.setup(); 
+  }
+</script>
+
+<div id='lefttext'>
+<%= link_to "A Medieval Arabic Reform of the Ptolemaic Lunar Model", "http://adsabs.harvard.edu/full/1989JHA....20..157S" %>
+</div>
+
+<div id='righttext'>
+ 
+</div>
+

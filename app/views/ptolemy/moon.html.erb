@@ -1,20 +1,23 @@
 <script>
   window.onload = function(){
     var universe = new Universe( { earth:{type:'center'},moon:{},sun:{},/*mars:{}*/});
-    universe.planets.sun.drawDeferent = false;
-    universe.satellitePaths    = true;
-    universe.includeSatellites = true;
+    universe.planets.sun.drawDeferent = true;
+    universe.satellitePaths           = true;
+    universe.includeSatellites        = true;
+    universe.label                    = true;
     aus = universe.planets.moon.aus;
     mm  = universe.planets.moon.mm;
     universe.planets.sun.aus = aus*1.25; // scale the mean sun into the picture
     universe.max_planet_size = 25;
-    universe.min_planet_size = 5;
+    universe.min_planet_size = 10;
 
-    // if you want to toss a very-not-to-scale mars and sun in
-    /* universe.planets.mars.aus = aus*4;
-    <%= render "mars" %> */
-    universe.rate = .2
-    universe.planets.moon.deferent({mm:mm*-0.8,radius:aus*.25}).cycle({mm:mm*0.9,radius:aus*.75}).cycle({mm:mm*.015,radius:aus*.1});
+    universe.rate = .1
+    universe.planets.moon.cycles([
+      {mm:-mm*0.8,radius:aus*.25,name:'auxiliary'},
+      {mm:mm*0.9, radius:aus*.75,name:'deferent',equant:0},
+      {mm:mm*.015,radius:aus*.1},
+    ]);
+
     universe.setup(1); 
   }
 </script>
@@ -22,8 +25,13 @@
 <div id='lefttext'>
   The parameters here aren't exactly right, but Ptolemy's moon model moved in this general
   fashion with respect to the mean sun.
+
+  <p>The deferent moves uniformally around an equant placed at the center,
+  rather than around it's own moving center on the auxiliary circle.
+
 </div>
 
 <div id='righttext'>
-  Note the variations in the apparent size of the Moon, as seen from Earth, predicted by this model.  
+  Note the variations in the apparent size of the Moon, as seen from Earth, predicted by this model.
+    
 </div>

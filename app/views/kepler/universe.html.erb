@@ -10,6 +10,8 @@
     });
     for (var i in universe.planets) {
       universe.planets[i].elliptic();
+      universe.planets[i].drawDeferent = true;
+
     }
     universe.max_planet_size = 10;
     universe.rate = .5;

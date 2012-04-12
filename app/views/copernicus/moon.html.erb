@@ -1,0 +1,30 @@
+<script>
+  window.onload = function(){
+    var universe = new Universe({ sun:{},earth:{type:'center'},moon:{} });
+    universe.label  = true;
+
+    universe.satellitePaths    = false;
+    universe.includeSatellites = true;
+
+    universe.rate = .1;
+    universe.min_planet_size = 4;
+    universe.max_planet_size = 20;
+
+    <%= render 'moon' %>
+
+    universe.setup(); 
+    // put the sun off to the side:
+    universe.planets.sun._cycles = [];
+    universe.planets.sun.static_x = universe.w;
+    universe.planets.sun.static_y = universe.h*.5;
+  }
+</script>
+
+<div id='lefttext'>
+  
+ </div>
+
+ <div id='righttext'>
+
+</div>
+

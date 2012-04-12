@@ -1,4 +1,4 @@
-class GlossaryController < ActionController::Base
+class UrdiController < ActionController::Base
   layout 'application'
   protect_from_forgery
 

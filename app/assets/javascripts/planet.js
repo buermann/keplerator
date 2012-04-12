@@ -1,16 +1,19 @@
 Sexadecimal = function(sex) {
     if (!sex || typeof sex != 'string') return sex; // nothing to do here
 
-    var factors = sex.split('*'); // it's common to want to pass parameters as factors of other parameters, so we'll allow it to be passed as a leading string in the sexa notation
+    // wouldn't operator overloading be wonderful?
+    var factors = sex.split('*'); // it's common to want to pass parameters as factors of other parameters, so we'll hack it to be passed as a leading string in the sexadecimal notation
     sex         = factors[1] || factors[0] ;
-    sex = sex.replace(/[^-0-9]+/g,':'); // who cares what divider you're using?
-
     var factor  = ( factors[1] ) ? factors[0] : 1;
-    var places = sex.split(':');
+    var places = sex.replace(/[^-0-9]+/g,':').split(':'); // who cares what divider you're using?
     var sign = (places[0].match(/-/)) ? -1 : 1;
 
+    // set the initial divisor to 1/60^(number of places before the ;) 
+    var div = 1;
+    var sixties = sex.split(';')[0].replace(/[^-0-9]+/g,':').split(':')
+    for (var i = 0; i < sixties.length-1; i++) { div = div*1/60;  }
+
     var dec = 0; // the decimal value we will return
-    var div = 1; // the initial divisor for the first place integer
     for (var i in places) {
       var p = places[i];
       div = (i > 0) ? div*60 : div; // 60^ith
@@ -24,7 +27,7 @@ Planet = function(universe,p) {
   this.universe = universe;
   this.shadow   = true; // turn off the sun
   this.offset   = 0; // time offset for the planet from the universe, in days
-
+  this.static_x = this.static_y = null; // set these after setup to draw, say, a static sun off to the side.
 
   this.drawDeferent  = true;  // draw the deferent circle
 
@@ -47,6 +50,7 @@ Planet = function(universe,p) {
   };
 
   this.elliptic = function(eccentricity) {
+    this.drawDeferent = false; // don't draw the deferent of ellipses, generally
     var c = {type:'ellipse',radius:Sexadecimal(this.aus),mm:Sexadecimal(this.mm)};
     c.eccentricity = eccentricity || this.eccentricity || 0;
     this.cycle(c);
@@ -158,7 +162,7 @@ Planet.prototype = {
       ctx.beginPath();
       ctx.arc(x, y, r, Math.PI * 2, 0, false);
       ctx.closePath();
-      if (that.name == 'sun' || that.shadow == false) {
+      if (that.name.match(' sun') || that.name == 'sun' || that.shadow == false) {
         var grd = ctx.createRadialGradient(x,y,r/8,x,y,r);
         grd.addColorStop(0, p.color);
         grd.addColorStop(.8, "#FF0");
@@ -227,22 +231,25 @@ Planet.prototype = {
 
   tusi: function(e) {
     e.mm = e.mm || 1;
-    var t = e.mm*this.t+3*Math.PI/2;  // elipse along x-axis, add PI/2, 3PI/2 along the y-axis
+    var t = e.mm*this.day+3*Math.PI/2;  // elipse along x-axis, add PI/2, 3PI/2 along the y-axis
     var a = 0.5*e.radius;
     var b = 0.5*a;
 
-    // draw the tusi couple
+    // draw the outer circle
     this.drawCircle(this.x, this.y, e.radius);
     // draw the connecting point of the couple
     var ix = this.x + b*Math.cos(t) + b*Math.cos(t) 
     var iy = this.y + b*Math.sin(t) + b*Math.sin(t)
+    // draw the inner circle
     this.drawCircle(ix, iy, .5*e.radius);
 
-    // draw the lines linking its bits up
     var cx = this.x + a*Math.cos(t) - a*Math.cos(t) 
     var cy = this.y + a*Math.sin(t) + a*Math.sin(t)
+
+    // draw the lines linking its bits up
     this.drawLine(ix,iy,cx,cy);
     this.drawLine(this.x,this.y,cx,cy);
+
     this.x = cx; this.y = cy;
     return this;
   },
@@ -273,6 +280,8 @@ Planet.prototype = {
     this.last_ex = this.ex; this.lastey = this.ey;
     this.x = this.origin.x + a*Math.cos(t)*Math.cos(phi) - b*Math.sin(t)*Math.sin(phi);
     this.y = this.origin.y + a*Math.cos(t)*Math.sin(phi) - b*Math.sin(t)*Math.cos(phi);
+
+    if (this.drawDeferent) this.drawCircle(this.origin.x,this.origin.y, el.radius);
 
     return this;
 
@@ -313,18 +322,24 @@ Planet.prototype = {
   equant_angle: function(c) {
     c = c || this.current_cycle;
 
-    var t = c.mm * this.day * Math.PI/180; // the angle from the equant point
-    var r = c.radius || this.meancenter;
-    var e = c.equant || 0;
-    var k = e/r;
+    var t = c.mm * this.day * Math.PI/180; // the angle around the center of the circle
+    if (c.equant === undefined) return t;
 
-    if (!e) return t;
+    var e = c.equant || 0;
 
     c.equant_x = this.origin.x; c.equant_y = this.origin.y - e;
+
     // draw line from the origin to the equant point
     this.drawLine(this.origin.x, this.origin.y, c.equant_x, c.equant_y);
 
+    var R = c.radius || this.meancenter;
+    // find the distance of the equant from the possibly moving center of the
+    // current cycle
+    x = this.x-c.equant_x;
+    y = this.y-c.equant_y;
+    E = Math.sqrt(x*x+y*y);
     // http://www.mathpages.com/home/kmath639/kmath639.htm equation (8)
+    var k = E/R;
     alpha = t - Math.asin(k*Math.sin(t)); // the angle from the center point
     return alpha ; 
   },
@@ -333,7 +348,7 @@ Planet.prototype = {
     this.day = day +this.offset;
     var ox,oy;
 
-    if (typeof this.center === 'undefined') {
+    if (this.center === undefined) {
       ox = this.origin.x
       oy = this.origin.y;
     } else {
@@ -342,9 +357,9 @@ Planet.prototype = {
       oy = this.universe.planets[this.center].y
     }
 
-    if (this.type == 'center') {
+    if (this.type == 'center' || (this.static_y && this.static_x) ) {
       // draw the center and get out of here
-      this.x = ox; this.y = oy; 
+      this.x = this.static_x || ox; this.y = this.static_y || oy; 
       this.drawPlanet(this.x, this.y, this.size, { fill: true, color: this.color });
       return;
     }
@@ -362,8 +377,6 @@ Planet.prototype = {
     for (var e = 0; e < this._cycles.length; e++) {
       epi = this._cycles[e];
       epi.cycle_number = e;
-
-      // convert sexadecimal to decimal 
       this.current_cycle = epi;
       if (!epi ) { break; }
       this[epi.type]( epi );
