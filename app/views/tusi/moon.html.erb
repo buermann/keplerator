@@ -17,26 +17,17 @@
     // http://books.google.com/books?id=mOquCzBX3xcC&pg=PA264&lpg=PA264
     universe.planets.moon.cycles([
       {mm:"13;13,45,39,40", radius:'60'},
-      {type:'tusi',mm:-1/4,radius:'20'},
+      {type:'tusi',mm:-1.2,radius:'15'},
     ]);
 
-    universe.setup(); 
+    universe.setup(1); 
   }
 </script>
 
 <div id='lefttext'>
-  Ibn al-Shatir's lunar model, identical in all respects but some parameters to Copernicus',
-  as described in <%= link_to "Victor Roberts' 1957 paper", "http://www2.kenyon.edu/Depts/Math/Aydin/Teach/Sp11/191/PreCopernican.pdf" %>.  God knows better.
-
-
+  Did Tusi do something liek this?
 </div>
 
 <div id='righttext'>
-  It notably predicts far less variation in the size of the lunar disc than <%= link_to "the earlier Greek models", "/ptolemy/moon" %>.  Roughly speaking the first epicycle, slowly
-  changing the mean Earth-Moon distance, accounts for
-  <%= link_to "evection", "http://en.wikipedia.org/wiki/Evection" %>, while the second smaller
-  epicycle accounts for
-  <%= link_to "the equation of center", "http://en.wikipedia.org/wiki/Equation_of_the_center" %>.
- 
 </div>
 

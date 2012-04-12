@@ -10,24 +10,16 @@
     universe.min_planet_size = 4;
     universe.max_planet_size = 12;
 
-    aus = universe.planets.moon.aus;
-    mm  = universe.planets.moon.mm;
-    universe.planets.moon.cycles([
-    {mm:mm*-0.8, radius:aus*80*.25},
-    {mm:mm*0.9,radius:aus*80*.75},
-    {mm:mm*.015,radius:aus*80*.1}
-    ]);
-
     for (var i in universe.planets) {
       p = universe.planets[i];
-      console.log(i,p);
+      eccentric = p.eccentricity || 0;
 
       if (i == 'moon') {
         p.cycles([
         // scale Ibn al-Shatir's model into view:
-          {mm:"13;13,45,39,40", radius:.060},
-          {mm:"-13;3,53,46,18",radius:.006583333333333333 },
-          {mm:"24;22,53,23",radius:.0014166666666666667},  
+          {mm:"13;13,45,39,40", radius:.25*.60},
+          {mm:"-13;3,53,46,18",radius:.5*.06583333333333333 },
+          {mm:"24;22,53,23",radius:.014166666666666667},  
           ]) ;
         continue;
       }
@@ -35,8 +27,14 @@
         p.eccentric(p.eccentricity).deferent();
         continue;
       }
+      if (i == 'mercury') { 
+        p.eccentric(eccentric).cycles([
+        {radius:p.aus, mm:.5*p.mm},
+        {type:'tusi',radius:p.aus*.1, mm:.5},
+        ]);
+        continue;
+      }
       // http://farside.ph.utexas.edu/syntaxis/Almagest/node4.html
-      eccentric = p.eccentricity || 0;
       p.eccentric(eccentric).cycles([
         {radius:p.aus, mm:.5*p.mm},
         {radius:p.aus*.1, mm:p.mm},
@@ -47,7 +45,7 @@
 </script>
 
 <div id='lefttext'>
-  Here we have a first draft based on <%= link_to "Richard Fitzpatrick's description", "http://farside.ph.utexas.edu/syntaxis/Almagest/node4.html" %> of Copernicus' heliostatic universe.  The Earth moves on a uniform circular orbit at a small eccentric to the Sun while the Moon moves about the Earth per <%= link_to "Ibn al-Shatir's lunar model", "/shatir/moon/" %> (greatly exaggerated here to scale into frame).  The planets move about the Sun on epicycles that rotate twice as fast as their deferents, with eccentrics about equal to the eliptical eccentricity of their modern orbits.  There's a missing epicycle for Mercury that Fitzpatrick mentions but does not describe.
+  Here we have a first draft based on <%= link_to "Richard Fitzpatrick's description", "http://farside.ph.utexas.edu/syntaxis/Almagest/node4.html" %> of Copernicus' heliostatic universe.  The Earth moves on a uniform circular orbit at a small eccentric to the Sun while the Moon moves about the Earth per <%= link_to "Ibn al-Shatir's lunar model", "/shatir/moon/" %> (greatly exaggerated here to scale into frame).  The planets move about the Sun on epicycles that rotate twice as fast as their deferents, with eccentrics about equal to the eliptical eccentricity of their modern orbits.  There's a missing epicycle for Mercury that Fitzpatrick mentions but does not describe.  Mario di Bono says he used the Tusi couple on Mercury in his <%= link_to "1995 paper", "http://articles.adsabs.harvard.edu/full/1995JHA....26..133D" %> (p.147) arguing that Copernicus may have devised it independently as variation on a similar device by Proclus.
   
 </div>
 

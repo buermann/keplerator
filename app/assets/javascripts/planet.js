@@ -231,7 +231,8 @@ Planet.prototype = {
 
   tusi: function(e) {
     e.mm = e.mm || 1;
-    var t = e.mm*this.day+3*Math.PI/2;  // elipse along x-axis, add PI/2, 3PI/2 along the y-axis
+    t = this.day * this.mm * Math.PI/180;
+    var t = e.mm*this.t+3*Math.PI/2;  // elipse along x-axis, add PI/2, 3PI/2 along the y-axis
     var a = 0.5*e.radius;
     var b = 0.5*a;
 

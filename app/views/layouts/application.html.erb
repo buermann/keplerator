@@ -12,7 +12,7 @@
     <% if File.exists?(Rails.root.join("app","views",params[:controller],"_navbar.html.erb")) %>
       <%= render :partial => params[:controller]+"/navbar" %>
     <% else %> 
-      <%= link_to "Glossary", '/glossary/'  %> |
+      <%= link_to "Concepts", '/lexicon/'  %> |
       <%= link_to "Ptolemy", '/ptolemy/'  %> |
       <%= link_to "Shatir", '/shatir/'  %> |
       <%= link_to "Tycho", '/tycho/'  %> |
