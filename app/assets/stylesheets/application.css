@@ -5,7 +5,18 @@
  *= require_self
  *= require_tree . 
 */
-body { color:#DDD; border:0; margin:0; padding:0; background-color:#003; background:url("/alex-mellinger-2009-western-edge.png") center center no-repeat;  background-attachment:fixed; background-size: 100% 100%; font-family:"Helvetica",Sans-serif; font-size:.8em;}
+body {
+  color:#DDD;
+  border:0; margin:0; padding:0;
+  background-color:#003;
+  background:url("/alex-mellinger-2009-western-edge.png");
+  background-attachment:fixed;
+  background-size: cover;
+  background-position: center center;
+  background-size: 100% 100%;
+  font-family:"Helvetica",Sans-serif;
+  font-size:.8em;
+}
 
 a         { text-decoration:none; }
 a:link    {color:#A0A7A5;}
