@@ -5,15 +5,18 @@
  *= require_self
  *= require_tree . 
 */
+html { min-height: 100%; }
 body {
+  min-height: 100%;
   color:#DDD;
   border:0; margin:0; padding:0;
   background-color:#003;
   background:url("/alex-mellinger-2009-western-edge.png");
-  background-attachment:fixed;
   background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   background-size: cover;
-  background-position: center center;
   font-family:"Helvetica",Sans-serif;
   font-size:.8em;
 }
