@@ -1,7 +1,6 @@
 source 'http://rubygems.org'
 
 gem 'rails', '4.1'
-gem 'heroku'
 gem 'jquery-rails'
 
 # Bundle edge Rails instead:
