@@ -7,21 +7,19 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
-    <nav id='toptext'>
-    <%= link_to "Home", '/'  %> |
-    <% if File.exists?(Rails.root.join("app","views",params[:controller],"_navbar.html.erb")) %>
-      <%= render :partial => params[:controller]+"/navbar" %>
-    <% else %> 
-      <%= link_to "Concepts", '/lexicon/'  %> |
-      <%= link_to "Ptolemy", '/ptolemy/'  %> |
-      <%= link_to "Shatir", '/shatir/'  %> |
-      <%= link_to "Tycho", '/tycho/'  %> |
-      <%= link_to "Nicolas", '/copernicus/'  %> |
-    <% end %> 
-    <div class='right_nav'>
+    <div id='toptext'>
+      <%= link_to "Home", '/'  %> |
+      <% if File.exists?(Rails.root.join("app","views",params[:controller],"_navbar.html.erb")) %>
+        <%= render :partial => params[:controller]+"/navbar" %>
+      <% else %> 
+        <%= link_to "Concepts", '/lexicon/'  %> |
+        <%= link_to "Ptolemy", '/ptolemy/'  %> |
+        <%= link_to "Shatir", '/shatir/'  %> |
+        <%= link_to "Tycho", '/tycho/'  %> |
+        <%= link_to "Nicolas", '/copernicus/'  %> |
+      <% end %> 
       <%= link_to "About", '/about'  %> 
     </div>
-    </nav>
     <%= yield %>
     <div id='canvas'>
       <canvas id="dynamic">Your browser needs to support the HTML5 canvas element to view these animations properly.</canvas>

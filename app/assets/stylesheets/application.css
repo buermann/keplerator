@@ -33,7 +33,7 @@ a:visited {color:#AFACA8;}
 #lefttext { float: left; width:20%; margin: 1% 0 1% 5%; } 
 #righttext { float: right; width:20%; margin: 2% 5% 1% 0; vertical-align:top; } 
 
-#canvas { float: left; margin: 2% 0 0 -20%;  }
+#canvas { float: left; margin: 2% 0 0 0;  }
 #dynamic,#static {
   position:absolute;
 }
@@ -48,7 +48,7 @@ a:visited {color:#AFACA8;}
     clear: both;
   }
 
-  #toptext { font-size: 2em; }  
+  #toptext { font-size:2em; }  
   #lefttext { }
   #righttext {  }
   #canvas { margin:0;  }
