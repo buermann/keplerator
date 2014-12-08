@@ -46,8 +46,8 @@ Universe = function(conf) {
 
 	this.center = {};
 
-	this.h = static.height = dynamic.height = Math.floor($(window).height()) * .95;
-	this.w = static.width  = dynamic.width  = Math.floor($(window).width())  * .50;
+	this.h = static.height = dynamic.height = Math.floor(window.innerHeight * .90);
+	this.w = static.width  = dynamic.width  = Math.floor(window.innerWidth  * .90);
 	this.origin = { x: this.w / 2, y: this.h / 2 };
 
 	this.addPlanets();

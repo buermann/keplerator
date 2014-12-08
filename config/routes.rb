@@ -1,7 +1,7 @@
 Keplerator::Application.routes.draw do
   # The priority is based upon order of creation:
   # first created -> highest priority.
-   root :to => "lexicon#deferent"
+   root :to => "lexicon#index"
    get '/about' => "home#about"
 
    # more like note keeping of the ground we want to cover, which needs to find a better home:

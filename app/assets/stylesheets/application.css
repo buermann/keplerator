@@ -5,20 +5,20 @@
  *= require_self
  *= require_tree . 
 */
-html { min-height: 100%; }
+html { height: 100%; min-height: 100%; }
 body {
   min-height: 100%;
   color:#DDD;
   border:0; margin:0; padding:0;
   background-color:#003;
-  background:url("/alex-mellinger-2009-western-edge.png");
+  background:url("/alex-mellinger-2009-western-edge.png") center center;
   background-repeat: no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  background-attachment: fixed;
   font-family:"Helvetica",Sans-serif;
-  font-size:.8em;
 }
 
 a         { text-decoration:none; }
@@ -27,13 +27,32 @@ a:active  {color:#FFFFFF;}
 a:hover   {color:#FEFDF8;}
 a:visited {color:#AFACA8;}
 
-.text { margin: 5% 10% 0 10%; } 
-.right { float: right; } 
-#toptext { width:90%; margin: 0% 5% 0% 5%; } 
-#lefttext { float: left; width:20%; margin: 5% 0 0 5%; } 
-#righttext { float:right; width:20%; margin: 5% 5% 0 0; vertical-align:top; } 
 
-#easel { } /* It might make sense to have a div wrapper for positioning? */
-#dynamic,#static { position:absolute; left:25%; top:1em; padding:0; margin:0; border:0;  }
+#toptext { width:90%; margin: 5px 5% 0% 5%; } 
+#toptext .right_nav { float: right; } 
+#lefttext { float: left; width:20%; margin: 1% 0 1% 5%; } 
+#righttext { float: right; width:20%; margin: 2% 5% 1% 0; vertical-align:top; } 
+
+#canvas { float: left; margin: 2% 0 0 -20%;  }
+#dynamic,#static {
+  position:absolute;
+}
 #static { z-index:0; }
 #dynamic { z-index:5; }
+
+/* smartphone portrait mode, vertical layout */
+@media all and (orientation:portrait) {
+  html, body { margin: 0; } 
+  #lefttext,#righttext,#canvas {
+    width: 90%;
+    clear: both;
+  }
+
+  #toptext { font-size: 2em; }  
+  #lefttext { }
+  #righttext {  }
+  #canvas { margin:0;  }
+
+}
+
+

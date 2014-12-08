@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Keplerator</title>
-  <%= stylesheet_link_tag    "application" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
-</head>
-<body>
-  <div id='toptext'>
-      <%= link_to "Home", '/'  %> |
+  <head>
+    <title>Keplerator</title>
+    <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+    <nav id='toptext'>
+    <%= link_to "Home", '/'  %> |
     <% if File.exists?(Rails.root.join("app","views",params[:controller],"_navbar.html.erb")) %>
       <%= render :partial => params[:controller]+"/navbar" %>
     <% else %> 
@@ -18,13 +18,14 @@
       <%= link_to "Tycho", '/tycho/'  %> |
       <%= link_to "Nicolas", '/copernicus/'  %> |
     <% end %> 
-    <div class='right'>
+    <div class='right_nav'>
       <%= link_to "About", '/about'  %> 
     </div>
-  </div>
-
-<%= yield %>
-<canvas id="dynamic">Your browser needs to support the HTML5 canvas element to view these animations properly.  Best viewed in Firefox.</canvas>
-<canvas id="static"></canvas>
-</body>
+    </nav>
+    <%= yield %>
+    <div id='canvas'>
+      <canvas id="dynamic">Your browser needs to support the HTML5 canvas element to view these animations properly.</canvas>
+      <canvas id="static"></canvas>
+    </div>
+  </body>
 </html>
