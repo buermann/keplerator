@@ -1,6 +1,9 @@
 source 'http://rubygems.org'
 
+ruby '2.1.2'
 gem 'rails', '4.1'
+gem 'rails_12factor'
+gem 'unicorn'
 gem 'jquery-rails'
 
 # Bundle edge Rails instead:
