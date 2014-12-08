@@ -1,3 +1,6 @@
 <% %w(deferent eccentric equant epicycle tusi_couple).each do |t| %>
-<%= link_to t.capitalize.gsub("_"," "), "/lexicon/#{t}" %> |
+  <%= link_to t.capitalize.gsub("_"," "), "/lexicon/#{t}" %> |
+<% end %>
+<% %w(ptolemy shatir copernicus tycho kepler).each do |a| %>
+  <%= link_to a.capitalize.gsub("_"," "), "/#{a}" %> |
 <% end %>

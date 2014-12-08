@@ -1,22 +1,25 @@
 Sexadecimal = function(sex) {
-    if (!sex || typeof sex != 'string') return sex; // nothing to do here
+    /* wouldn't operator overloading be wonderful? */
+    if (!sex || typeof sex != 'string') return sex; 
 
-    // wouldn't operator overloading be wonderful?
-    var factors = sex.split('*'); // it's common to want to pass parameters as factors of other parameters, so we'll hack it to be passed as a leading string in the sexadecimal notation
-    sex         = factors[1] || factors[0] ;
-    var factor  = ( factors[1] ) ? factors[0] : 1;
-    var places = sex.replace(/[^-0-9]+/g,':').split(':'); // who cares what divider you're using?
-    var sign = (places[0].match(/-/)) ? -1 : 1;
+    /* it's common to want to pass parameters as factors of other parameters, so we'll
+    * kludge it to be passed as a leading string in the sexadecimal notation */
+    var factors = sex.split('*');
+    sex         = factors[1] || factors[0];
 
-    // set the initial divisor to 1/60^(number of places before the ;) 
-    var div = 1;
-    var sixties = sex.split(';')[0].replace(/[^-0-9]+/g,':').split(':')
-    for (var i = 0; i < sixties.length-1; i++) { div = div*1/60;  }
+    var factor  = ( factors[1] ) ? factors[0] : 1
+      , places = sex.replace(/[^-0-9]+/g,':').split(':')
+      , sign = (places[0].match(/-/)) ? -1 : 1
+      , div = 1
+      /* set the initial divisor to 1/60^(number of places before the ';') */
+      , sixties = sex.split(';')[0].replace(/[^-0-9]+/g,':').split(':');
 
-    var dec = 0; // the decimal value we will return
+    for (var i = 0, length = sixties.length-1; i < length; i++) { div = div*1/60;  }
+
+    var dec = 0; /* the decimal value we will return */
     for (var i in places) {
       var p = places[i];
-      div = (i > 0) ? div*60 : div; // 60^ith
+      div = (i > 0) ? div*60 : div; /* 60^ith */
       dec += p/div;
     }
     return factor*dec*sign;
@@ -42,9 +45,7 @@ Planet = function(universe,p) {
 
   this._eccentric = 0;
   this.eccentric = function(e) {
-    if (e == undefined) {
-      return this._eccentric;
-    }
+    if (e == undefined) return this._eccentric;
     this._eccentric = e;
     return this;
   };
@@ -68,11 +69,10 @@ Planet = function(universe,p) {
   };
 
   this.cycles = function(es) {
-    // type = tusi, epicycle, urdi, ellipse
-    if (es == undefined) { return this._cycles; }
-    if (!( es instanceof Array)) {
-      es = [es];
-    }
+    // type = tusi|epicycle|urdi|ellipse
+    if (es == undefined)  return this._cycles; 
+
+    if (!( es instanceof Array)) es = [es];
     for (i in es) {
       var epi = es[i];
       epi.radius = Sexadecimal(epi.radius);
@@ -84,26 +84,19 @@ Planet = function(universe,p) {
   };
 
   this.equant   = function(eq) {
+    if (eq == undefined) return this._equant;
     if (eq) this._equant = eq;
     return this;
   };
 
   this.deferent = function(d) {
+    // set up a simple default circle based on modern parameters if none passed
     d = d || {type:'epicycle',mm:Sexadecimal(this.mm),radius:Sexadecimal(this.aus)};
     if (this._equant === true) { d.equant = this._eccentric*2; }
     else if (this._equant)     { d.equant = _equant; }
-    this.cycle(d);
+    this.cycle(d); // should really probably unshift it to _cycles?
     return this;
   };
-
-  this.couple = function(es) {
-    if (es == undefined) { return this._cycles; }
-    // type = tusi, epicycle, urdi, hippopede
-    es.type = es.type || "tusi";
-    this._cycles.push( es );
-    return this;
-  };
-
 };
 
 Planet.prototype = {
@@ -151,7 +144,7 @@ Planet.prototype = {
 
   drawPlanet: function(x, y, r, p) {
     if (!x || !y || !r) return; // don't bother if there's nothing to draw
-      p = p || {}
+    p = p || {}
     p.color = this.color || '#FFF';
 
     var ctx  = this.ctx;
@@ -232,21 +225,21 @@ Planet.prototype = {
   tusi: function(e) {
     e.mm = e.mm || 1;
     t = this.day * this.mm * Math.PI/180;
-    var t = e.mm*this.t+3*Math.PI/2;  // elipse along x-axis, add PI/2, 3PI/2 along the y-axis
-    var a = 0.5*e.radius;
-    var b = 0.5*a;
+    /* elipse along x-axis, add PI/2, 3PI/2 along the y-axis */
+    var t = e.mm*this.t+3*Math.PI/2 
+      , a = 0.5*e.radius
+      , b = 0.5*a;
 
     // draw the outer circle
     this.drawCircle(this.x, this.y, e.radius);
     // draw the connecting point of the couple
     var ix = this.x + b*Math.cos(t) + b*Math.cos(t) 
-    var iy = this.y + b*Math.sin(t) + b*Math.sin(t)
+      , iy = this.y + b*Math.sin(t) + b*Math.sin(t);
     // draw the inner circle
     this.drawCircle(ix, iy, .5*e.radius);
 
     var cx = this.x + a*Math.cos(t) - a*Math.cos(t) 
-    var cy = this.y + a*Math.sin(t) + a*Math.sin(t)
-
+      , cy = this.y + a*Math.sin(t) + a*Math.sin(t);
     // draw the lines linking its bits up
     this.drawLine(ix,iy,cx,cy);
     this.drawLine(this.x,this.y,cx,cy);
@@ -256,12 +249,15 @@ Planet.prototype = {
   },
 
   urdi: function(e) {
-    // Urdi's Lemma regards a particular arrangement of epicycles:
-    // an epicycle (the director) radius 1x and velocity 2k on an epicycle (the deferent)
-    // of radius 2x and velocity 1k.
+    /*
+    * Urdi's Lemma regards a particular arrangement of epicycles:
+      An epicycle (the director) radius 1x and velocity 2k on an epicycle (the deferent)
+      of radius 2x and velocity 1k.
 
-    // We just draw some extra lines on the final director of epicycles that follow
-    // urdi's lemma
+      We just draw some extra lines on the final director of epicycles that follow
+      urdi's lemma.
+    */
+
     this.drawLine(this.origin.x,this.origin.y,this.origin.x,this.origin.y-e.radius);
     this.drawLine(this.origin.x,this.origin.y,this.origin.x,this.origin.y-2*e.radius);
 
@@ -272,12 +268,13 @@ Planet.prototype = {
   },
 
   ellipse: function(el) {
-    var t = this.t;
-    phi = 90*Math.PI/180;
-   
-    var a = el.radius || this.meancenter; // major axis is equal the mean distance to the focus
-    var e = el.eccentricity*this.universe.eccentricityFactor;
-    var b = a*Math.sqrt(Math.abs(1-e*e));
+    var t   = this.t
+      , phi = 90*Math.PI/180
+      /* major axis is equal the mean distance to the focus */
+      , a = el.radius || this.meancenter
+      , e = el.eccentricity*this.universe.eccentricityFactor
+      , b = a*Math.sqrt(Math.abs(1-e*e));
+
     this.last_ex = this.ex; this.lastey = this.ey;
     this.x = this.origin.x + a*Math.cos(t)*Math.cos(phi) - b*Math.sin(t)*Math.sin(phi);
     this.y = this.origin.y + a*Math.cos(t)*Math.sin(phi) - b*Math.sin(t)*Math.cos(phi);

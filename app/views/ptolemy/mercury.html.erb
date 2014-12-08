@@ -16,7 +16,10 @@
     universe.planets.mercury.drawEquant   = false;
 
     universe.eccentricityFactor =5;
-
+    /*
+    http://www.clas.ufl.edu/users/ufhatch/HIS-SCI-STUDY-GUIDE/0034_summaryPtolemiacAstron.html
+    Robert A. Hatch says "In the case of Mercury, Ptolemy found he could not allow even the equant to be stationary".  I can't find anybody else who says that, others put the equant at the eccentric, and say the deferent moves with respect to that static rather than moving equant. 
+    */
     universe.planets.mercury.eccentric(6).cycles([
     {mm:-mm,radius:3},
     {mm:mm,radius:18,equant:3},
@@ -35,7 +38,7 @@
 </div>
 <div id='righttext'>
   As <%= link_to "al-Haytham", "http://en.wikipedia.org/wiki/Alhazen" %> complained,
-  however, the real challenge here is probably to build a model in which Mercury
-  doesn't periodically collide with the Sun.
+  however, the real challenge here is to build a model in which Mercury
+  doesn't periodically collide with the Sun. The same problem can afflict <a href="/ptolemy/mars">Ptolemaic models of Mars</a>, which periodically comes closer to the Earth than Sun.
   
 </div>
