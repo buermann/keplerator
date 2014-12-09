@@ -1,5 +1,4 @@
-
-The Rails framework itself is mostly superfluous to this project until we allow users to build their own models.  The simple HTML5 canvas animation library for building out the models is all in app/assets/javascripts/.  The minimum required to set up a new model of the universe is the following:
+The simple HTML5 canvas animation library for building out the models is all in app/assets/javascripts/.  The minimum required to set up a new model of the universe is the following:
 
 <script>
   window.onload = function(){
@@ -8,7 +7,7 @@ The Rails framework itself is mostly superfluous to this project until we allow 
   }
 </script>
 
-All the planets as well as Pluto are built in with modern values for their parameters.
+All the planets as well as Pluto are built in with modern values for their default parameters.
 
 Any given planet can be added manually, with these parameters defined at a minimum:
 
@@ -18,7 +17,9 @@ Any given planet can be added manually, with these parameters defined at a minim
     });
 </script>
 
-Deferents are calculated as epicycles, if no epicycles are defined a basic deferent from
+Paramters can be passed as sexagesimal (base 60) straight from the literature.
+
+Deferents are calculated as epicycles: if no epicycles are defined a basic deferent from
 the AUs (aus:) and mean movement (mm:) properties will be added.  Here's a more complex
 model:
 

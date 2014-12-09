@@ -1,9 +1,9 @@
-Sexadecimal = function(sex) {
+Sexagesimal = function(sex) { /* not base-16, but base-60 mixed with base-10 */
     /* wouldn't operator overloading be wonderful? */
     if (!sex || typeof sex != 'string') return sex; 
 
     /* it's common to want to pass parameters as factors of other parameters, so we'll
-    * kludge it to be passed as a leading string in the sexadecimal notation */
+    * kludge it to be passed as a leading string in the Sexagesimal notation */
     var factors = sex.split('*');
     sex         = factors[1] || factors[0];
 
@@ -40,8 +40,8 @@ Planet = function(universe,p) {
   for (i in p) {
     this[i] = p[i];
   }
-  this.aus = Sexadecimal(p.aus);
-  this.mm  = Sexadecimal(p.mm);
+  this.aus = Sexagesimal(p.aus);
+  this.mm  = Sexagesimal(p.mm);
 
   this._eccentric = 0;
   this.eccentric = function(e) {
@@ -52,7 +52,7 @@ Planet = function(universe,p) {
 
   this.elliptic = function(eccentricity) {
     this.drawDeferent = false; // don't draw the deferent of ellipses, generally
-    var c = {type:'ellipse',radius:Sexadecimal(this.aus),mm:Sexadecimal(this.mm)};
+    var c = {type:'ellipse',radius:Sexagesimal(this.aus),mm:Sexagesimal(this.mm)};
     c.eccentricity = eccentricity || this.eccentricity || 0;
     this.cycle(c);
     return this;
@@ -62,8 +62,8 @@ Planet = function(universe,p) {
   this.cycle = function(e) {
     if (e == undefined) { return this._cycles.shift; }
     else { this._cycles.push( e ); }
-    e.radius = Sexadecimal(e.radius);
-    e.mm = Sexadecimal(e.mm);
+    e.radius = Sexagesimal(e.radius);
+    e.mm = Sexagesimal(e.mm);
     e.type = e.type || 'epicycle';
     return this;
   };
@@ -75,8 +75,8 @@ Planet = function(universe,p) {
     if (!( es instanceof Array)) es = [es];
     for (i in es) {
       var epi = es[i];
-      epi.radius = Sexadecimal(epi.radius);
-      epi.mm = Sexadecimal(epi.mm);
+      epi.radius = Sexagesimal(epi.radius);
+      epi.mm = Sexagesimal(epi.mm);
       epi.type = epi.type || "epicycle";
       this._cycles.push( epi );
     }
@@ -91,7 +91,7 @@ Planet = function(universe,p) {
 
   this.deferent = function(d) {
     // set up a simple default circle based on modern parameters if none passed
-    d = d || {type:'epicycle',mm:Sexadecimal(this.mm),radius:Sexadecimal(this.aus)};
+    d = d || {type:'epicycle',mm:Sexagesimal(this.mm),radius:Sexagesimal(this.aus)};
     if (this._equant === true) { d.equant = this._eccentric*2; }
     else if (this._equant)     { d.equant = _equant; }
     this.cycle(d); // should really probably unshift it to _cycles?
