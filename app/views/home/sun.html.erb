@@ -1,9 +1,7 @@
 <script>
   window.onload = function(){
-    var universe = new Universe();
-
     // Ptolemy's Sun
-    universe.init({ sun:{},earth:{type:'center'} });
+    var universe = new Universe({ sun:{},earth:{type:'center'} });
 
     universe.planets.sun.eccentric(.2)
 
@@ -11,6 +9,17 @@
   }
 </script>
 
-<div id='lefttext'>These models were used to determine the relative positions of celestial objects over the course of a year.  The diurnal movements in which everything rotates together around the Earth, or equivalently (and it was recognized as equivalent by early Islamic astronomers such as the 10th century al-Biruni) the Earth rotates on its axis, are not represented here, as they'd merely introduce an eye watering strobe effect.
+<div id='lefttext'>Astronomical models were used to determine the relative positions of celestial objects over the course of a year for economic, religious, and astrological reasons.  
 
+  <p>The diurnal movements in which everything rotates together around the Earth, or equivalently (and it was recognized as equivalent by early Islamic astronomers such as the 10th century al-Biruni) the Earth rotates on its axis, are not represented here, as they'd merely introduce an eye watering strobe effect. 
+</div>
+
+<div id='righttext'>
+  <ol>
+    <li><%= link_to "Ptolemy", 'ptolemy/' %>, Roman Empire, Egypt, 90-168.
+    <li><%= link_to "Ibn al-Shatir", 'shatir/' %>, Mamluk Sultanate, Sryia, 1304-1375.
+    <li><%= link_to "Nicolas", 'copernicus/' %>, Prussian Empire, Poland, 1473-1543.
+    <li><%= link_to "Tycho", 'tycho/' %>, Holy Roman Empire, Denmark, 1546-1601.
+    <li><%= link_to "Kepler", 'kepler/' %>, Holy Roman Empire, Germany, 1571-1630.
+  </ol>
 </div>

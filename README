@@ -17,7 +17,7 @@ Any given planet can be added manually, with these parameters defined at a minim
     });
 </script>
 
-Paramters can be passed as sexagesimal (base 60) straight from the literature.
+Parameters can be passed as sexagesimal (base 60) straight from the literature.
 
 Deferents are calculated as epicycles: if no epicycles are defined a basic deferent from
 the AUs (aus:) and mean movement (mm:) properties will be added.  Here's a more complex
