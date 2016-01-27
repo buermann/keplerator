@@ -1,0 +1,9 @@
+var mm    = universe.planets.sun.mm;
+var aus   = universe.planets.mercury.aus*.09;
+universe.planets.mercury.eccentric(aus*.026).cycles([
+    {mm:-mm,radius: aus},
+    {mm:mm,radius: aus*18, equant: aus*3},
+    {mm:universe.planets.mercury.mm-mm, radius:aus*6},
+]);
+
+

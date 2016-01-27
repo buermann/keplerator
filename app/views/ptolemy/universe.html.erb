@@ -1,27 +1,26 @@
 <script>
   window.onload = function(){
-    var universe = new Universe({ sun:{},mercury:{},venus:{},earth:{type:'center'},mars:{},jupiter:{},saturn:{} });
+    var universe = new Universe({ sun:{},mercury:{},venus:{},earth:{type:'center'},mars:{} });
     universe.label  = true;
-
-    universe.min_planet_size = 4;
-    universe.rate = 5;
-    universe.planets.venus.aus = 0.45 // push it back inside the sun's orbit.
+    universe.min_planet_size = 2;
+    universe.max_planet_size = 8;
+    universe.rate = 2;
+    //universe.planets.venus.aus = 0.45 // push it back inside the sun's orbit.
     universe.planets.sun.eccentric(.05).equant(false);
-    universe.planets.sun.aus = 0.8;
+    //universe.planets.sun.aus = 0.8;
 
+    <%= render "mercury" %>
     <%= render "venus" %>
     <%= render "mars" %>
-    <%= render "jupiter" %>
-    <%= render "saturn" %>
     universe.setup(); 
   }
 </script>
 
 <div id='lefttext'>
-  <a href="http://en.wikipedia.org/wiki/Ptolemy">Ptolemaeus'</a> solar system, all in one eyefull using a linear scale of modern estimates for the distances between planets except for Venus.  If we plugged the modern relative distances for the Sun and Venus into Ptolemy's model it would <%= link_to 'look like Venus orbited the Sun', '/ptolemy/venus_modern_scale' %>.
- 
- 
- </div>
+  <a href="http://en.wikipedia.org/wiki/Ptolemy">Ptolemaeus'</a> inner solar system all in one eyefull using a linear-ish scale of modern estimates for the distances between planets.  If we plugged the modern relative distances for the Sun and Venus into Ptolemy's model it would <%= link_to 'look like Venus orbited the Sun', '/ptolemy/venus_modern_scale' %>.
+
+
+</div>
 
 <div id='righttext'>
 </div>

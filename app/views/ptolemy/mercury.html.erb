@@ -6,25 +6,20 @@
     universe.max_planet_size = 10;
     universe.min_planet_size = 5;
 
-    universe.planets.sun.aus = 23;
-
-    mm    = universe.planets.sun.mm;
+    //universe.planets.sun.aus = 23;
 
     universe.planets.sun.drawDeferent     = false;
     universe.planets.mercury.drawDeferent = true;
     universe.planets.mercury.drawEccentric = false;
     universe.planets.mercury.drawEquant   = false;
 
-    universe.eccentricityFactor =5;
+    universe.eccentricityFactor = 5;
     /*
     http://www.clas.ufl.edu/users/ufhatch/HIS-SCI-STUDY-GUIDE/0034_summaryPtolemiacAstron.html
     Robert A. Hatch says "In the case of Mercury, Ptolemy found he could not allow even the equant to be stationary".  I can't find anybody else who says that, others put the equant at the eccentric, and say the deferent moves with respect to that static rather than moving equant. 
     */
-    universe.planets.mercury.eccentric(6).cycles([
-    {mm:-mm,radius:3},
-    {mm:mm,radius:18,equant:3},
-    {mm:universe.planets.mercury.mm-mm,radius:6},
-    ]);
+
+    <%= render 'mercury' %>
     universe.setup(1); 
   }
 </script>
